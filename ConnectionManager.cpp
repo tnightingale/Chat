@@ -2,9 +2,10 @@
 
 using namespace Nightingale;
 
-ConnectionManager::ConnectionManager(int socketD) 
-  : listen_sd_(socketD), maxfd_(socketD), maxi_(-1) {
-
+ConnectionManager::ConnectionManager(int socketD) {
+    listen_sd_ = socketD;
+    maxfd_ = socketD;
+    maxi_ = -1;
     for (int i = 0; i < FD_SETSIZE; i++) {
         clients_[i] = -1; // -1 indicates available entry
     }
@@ -45,7 +46,7 @@ void ConnectionManager::start() {
 
             if (i == FD_SETSIZE) {
                 qDebug("ConnectionManager::start(); Too many clients.");
-                exit(1);
+                //exit(1);
             }
 
             // Add new descriptor to set.
