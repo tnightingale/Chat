@@ -12,9 +12,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    roomwindow.cpp
+    roomwindow.cpp \
+            Socket.cpp \
+            ConnectionManager.cpp
 
 HEADERS  += mainwindow.h \
+            Socket.h \
+            ConnectionManager.h \
     roomwindow.h
 
 FORMS    += mainwindow.ui \
