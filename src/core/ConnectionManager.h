@@ -47,6 +47,9 @@ public:
      */
     virtual ~ConnectionManager();
 
+signals:
+    void newConnection(int newSD);
+
 public slots:
     void start();
 };

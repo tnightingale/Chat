@@ -47,22 +47,24 @@ void ConnectionManager::start() {
 
 void ConnectionManager::accept() {
     int i = 0;
-    int new_sd = 0;
+    int newSD = 0;
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
 
     // Set up client socket.
-    if ((new_sd = ::accept(listenSocketD_, (struct sockaddr *) &client_addr, 
+    if ((newSD = ::accept(listenSocketD_, (struct sockaddr *) &client_addr, 
             &client_len)) == -1) {
         qDebug("ConnectionManager::start(); Accept error.");
     }
+
+    emit newConnection(newSD);
 
     qDebug("ConnectionManager::start(); Remote Address:  %s.", 
         inet_ntoa(client_addr.sin_addr));
 
     for (i = 0; i < FD_SETSIZE; i++) {
         if (clients_[i] < 0) {
-            clients_[i] = new_sd; // save descriptor
+            clients_[i] = newSD; // save descriptor
             break;
         }
     }
@@ -73,9 +75,9 @@ void ConnectionManager::accept() {
     }
 
     // Add new descriptor to set.
-    FD_SET(new_sd, &allset_);
-    if (new_sd > maxfd_) {
-        maxfd_ = new_sd;
+    FD_SET(newSD, &allset_);
+    if (newSD > maxfd_) {
+        maxfd_ = newSD;
     }
 
     if (i > maxi_) {

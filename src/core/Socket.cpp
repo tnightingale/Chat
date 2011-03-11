@@ -12,8 +12,12 @@ Socket::Socket() {
 
 Socket::~Socket() {
     delete cm_;
-    cThread_->quit();
-    delete cThread_;
+
+    if (cThread_ != NULL) {
+        cThread_->quit();
+        delete cThread_;
+    }
+
     close(socket_);
 }
 
