@@ -10,9 +10,14 @@ TARGET = Chat
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES +=  main.cpp \
+            mainwindow.cpp \
+            Socket.cpp \
+            ConnectionManager.cpp
 
-HEADERS  += mainwindow.h
+
+HEADERS  += mainwindow.h \
+            Socket.h \
+            ConnectionManager.h \
 
 FORMS    += mainwindow.ui

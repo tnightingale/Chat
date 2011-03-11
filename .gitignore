@@ -19,3 +19,4 @@ Makefile*
 *.plist
 /td.xcodeproj
 /img
+*.app
