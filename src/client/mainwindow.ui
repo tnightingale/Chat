@@ -13,6 +13,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#graphicsView {
+background-image: url(:/img/th_nightingale.png);
+}</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLineEdit" name="nameField">
     <property name="geometry">
@@ -123,10 +128,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
-      <width>91</width>
-      <height>81</height>
+      <y>10</y>
+      <width>101</width>
+      <height>101</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="interactive">
      <bool>true</bool>

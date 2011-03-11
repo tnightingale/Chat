@@ -14,7 +14,20 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">#RoomWindow {
+	background-image: url(:/img/nightingale.png);
+    background-position: right;
+    background-repeat: none;
+}
+#roomLog {
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 0, 0, 50), stop:0.339795 rgba(255, 0, 0, 50), stop:0.339799 rgba(255, 255, 255, 50), stop:0.662444 rgba(255, 255, 255, 50), stop:0.662469 rgba(0, 0, 255, 50), stop:1 rgba(0, 0, 255, 50));
+}
+#sendArea {
+	background-color: rgba(255, 255, 255, 100);
+}
+#userList {
+	background-color: rgba(255, 255, 255, 100);
+}</string>
   </property>
   <widget class="QLabel" name="rommName">
    <property name="geometry">
@@ -63,8 +76,6 @@
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="chatresource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

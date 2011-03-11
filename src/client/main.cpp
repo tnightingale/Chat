@@ -6,8 +6,8 @@ using namespace Nightingale;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    MainWindow* mw = new MainWindow();
+    mw->show();
 
     return a.exec();
 }
