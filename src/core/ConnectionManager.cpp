@@ -1,7 +1,5 @@
 #include "ConnectionManager.h"
 
-using namespace Nightingale;
-
 ConnectionManager::ConnectionManager(int listenSocketD) {
     listenSocketD_ = listenSocketD;
     maxfd_ = listenSocketD;

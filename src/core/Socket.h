@@ -4,8 +4,6 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-namespace Nightingale {
-
 class ConnectionManager;
 
 class Socket : public QObject {
@@ -45,4 +43,3 @@ public:
     void listen(int port);
 };
 
-}

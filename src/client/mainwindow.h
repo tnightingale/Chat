@@ -6,7 +6,7 @@
 namespace Ui {
     class MainWindow;
 }
-namespace Nightingale {
+
 class RoomWindow;
 class Socket;
 
@@ -21,10 +21,10 @@ public:
 public slots:
     void connectRoom();
 
-private:
+protected:
     Ui::MainWindow *ui;
     RoomWindow* rw;
     Socket *s;
 };
-}
+
 #endif // MAINWINDOW_H

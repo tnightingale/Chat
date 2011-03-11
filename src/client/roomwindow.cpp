@@ -1,8 +1,6 @@
 #include "roomwindow.h"
 #include "ui_roomwindow.h"
 
-using namespace Nightingale;
-
 RoomWindow::RoomWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RoomWindow)

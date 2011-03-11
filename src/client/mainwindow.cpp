@@ -3,8 +3,6 @@
 #include "./ui_mainwindow.h"
 #include "../core/Socket.h"
 
-using namespace Nightingale;
-
 MainWindow::MainWindow(QWidget *parent) 
   : QMainWindow(parent), ui(new Ui::MainWindow) {
 

@@ -6,7 +6,7 @@
 namespace Ui {
     class RoomWindow;
 }
-namespace Nightingale {
+
 class RoomWindow : public QWidget
 {
     Q_OBJECT
@@ -18,5 +18,5 @@ public:
 private:
     Ui::RoomWindow *ui;
 };
-}
+
 #endif // ROOMWINDOW_H

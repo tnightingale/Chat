@@ -1,8 +1,6 @@
 #include "Socket.h"
 #include "ConnectionManager.h"
 
-using namespace Nightingale;
-
 Socket::Socket() {
     if ((socket_ = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         throw "Socket::Socket(); Could not create socket.";

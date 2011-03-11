@@ -2,8 +2,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-namespace Nightingale {
-
 class ConnectionManager : public QObject {
   Q_OBJECT
 
@@ -54,4 +52,3 @@ public slots:
     void start();
 };
 
-}
