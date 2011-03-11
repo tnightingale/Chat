@@ -20,3 +20,5 @@ Makefile*
 /td.xcodeproj
 /img
 *.app
+ui_*
+qrc_*

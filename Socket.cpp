@@ -11,12 +11,10 @@ Socket::Socket() {
 }
 
 Socket::~Socket() {
-    qDebug("Socket::~Socket()");
+    delete cm_;
+    cThread_->quit();
+    delete cThread_;
     close(socket_);
-
-    //if (data_ != NULL) {
-    //    delete data_;
-    //}
 }
 
 void Socket::listen(int port) {
