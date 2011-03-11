@@ -11,8 +11,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    roomwindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    roomwindow.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    roomwindow.ui
+
+RESOURCES += \
+    chatresource.qrc
