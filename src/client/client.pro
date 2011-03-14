@@ -1,7 +1,7 @@
-include(./Nightingale.pri)
+include(../Nightingale.pri)
 
-include(./client/client.pri)
-include(./core/core.pri)
+include(./client.pri)
+include(../core/core.pri)
 
 DEPENDPATH  += .
 INCLUDEPATH += .

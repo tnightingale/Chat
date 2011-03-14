@@ -1,2 +1,2 @@
 SERVER_HDRS  += 
-SERVER_SRCS  += ./server/main.cpp
+SERVER_SRCS  += ./main.cpp
