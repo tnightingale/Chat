@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS  = ./src/server \
-           ./src/client
+SUBDIRS  = ./src/server.pro \
+           ./src/client.pro
