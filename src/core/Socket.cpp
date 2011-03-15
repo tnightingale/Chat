@@ -88,10 +88,12 @@ int Socket::read(QByteArray * buffer) {
         numBytesToRead -= n;
 
         if (numBytesToRead == 0 || *(bp - 1) == '\n') {
-          *bp = '\0';
+          //*bp = '\0';
           break;
         }
     }
+
+    qDebug("Socket::read(); Left reading loop with n = %d.", n);
 
     return n;
 }

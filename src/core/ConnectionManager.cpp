@@ -92,9 +92,10 @@ void ConnectionManager::accept() {
 void ConnectionManager::process(Socket * socket) {
     QByteArray * buffer = new QByteArray();
     int socketD = socket->getSocketD();
+    int bytesRead = 0;
 
     // Read from socket into buffer.
-    if (socket->read(buffer) == 0) {
+    if ((bytesRead = socket->read(buffer)) == 0) {
         // connection closed by client
 
         emit closedConnection(socketD);
@@ -107,5 +108,6 @@ void ConnectionManager::process(Socket * socket) {
     }
 
     // Do stuff with received data here.
-    qDebug() << buffer->constData();
+    QString message(*buffer);
+    qDebug() << QString().setNum(bytesRead) << ": " << message;
 }
