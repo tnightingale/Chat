@@ -1,8 +1,33 @@
-#include "Client.h"
+#include "./Client.h"
+#include "./mainwindow.h"
+#include "../../uic/ui_mainwindow.h"
 #include "../core/Socket.h"
 
-Client::Client() : serverSocket_(new Socket()) {}
+Client::Client(MainWindow * mw) : serverSocket_(new Socket()), mw_(mw) {
+    QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
+                     this, SLOT(slotConnect()));
+    
+    QObject::connect(mw_, SIGNAL(sendMessage(QString *)),
+                     this, SLOT(slotPrepMessage(QString *)));
+}
 
 Client::~Client() {
     delete serverSocket_;
+}
+
+void Client::connect(int port, QString * host) {
+    QByteArray * data = new QByteArray("Hello world!\n");
+    serverSocket_->connect(port, host->toAscii().constData());
+    serverSocket_->write(data);
+}
+
+void Client::slotConnect() {
+    QString host = mw_->getUi()->ipField->text();
+    int port = mw_->getUi()->portField->text().toInt();
+
+    this->connect(port, &host);
+}
+
+void Client::slotPrepMessage(QString * message) {
+    qDebug() << *message;
 }

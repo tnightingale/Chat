@@ -15,6 +15,8 @@ public:
     explicit RoomWindow(QWidget *parent = 0);
     ~RoomWindow();
 
+    Ui::RoomWindow * getUi() { return ui; }
+
 private:
     Ui::RoomWindow *ui;
 };

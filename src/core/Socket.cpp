@@ -53,7 +53,7 @@ void Socket::listen(int port) {
     cThread_->start();
 }
 
-void Socket::connect(int port, char * host) {
+bool Socket::connect(int port, const char * host) {
     hostent * hp;
     sockaddr_in server;
 
@@ -62,15 +62,17 @@ void Socket::connect(int port, char * host) {
 
     if ((hp = gethostbyname(host)) == NULL) {
         qDebug("Socket::connect(); Unknown server address: %s.", host);
-        return;
+        return false;
     }
     bcopy(hp->h_addr, (char *) &server.sin_addr, hp->h_length);
 
     // Connecting to the server
     if (::connect(socket_, (sockaddr *) &server, sizeof(server)) == -1) {
         qDebug("Socket::connect(); Can't connect to server: %s.", host);
-        return;
+        return false;
     }
+
+    return true;
 }
 
 

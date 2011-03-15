@@ -48,8 +48,6 @@ void ConnectionManager::start() {
             }
 
             // Data received, process socket.
-            qDebug("ConnectionManager::start(); (%d) Message received.", 
-                socket->getSocketD());
             this->process(socket); 
 
 

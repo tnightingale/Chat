@@ -3,12 +3,10 @@
 
 RoomWindow::RoomWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RoomWindow)
-{
+    ui(new Ui::RoomWindow) {
     ui->setupUi(this);
 }
 
-RoomWindow::~RoomWindow()
-{
+RoomWindow::~RoomWindow() {
     delete ui;
 }

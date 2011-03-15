@@ -56,7 +56,7 @@ public:
     /**
      * Connects to host on specified port.
      */
-    void connect(int port, char * host);
+    bool connect(int port, const char * host);
 
     /**
      * Reads data from socket. 
