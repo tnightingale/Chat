@@ -41,16 +41,36 @@ void Socket::listen(int port) {
     cThread_ = new QThread();
 
     // Wiring up connections.
-    connect(cThread_, SIGNAL(started()),
+    QObject::connect(cThread_, SIGNAL(started()),
             cm_, SLOT(start()));
-    connect(cm_, SIGNAL(newConnection(int, char *)),
+    QObject::connect(cm_, SIGNAL(newConnection(int, char *)),
             parent(), SLOT(slotNewUser(int, char *)));
-    connect(cm_, SIGNAL(closedConnection(int)),
+    QObject::connect(cm_, SIGNAL(closedConnection(int)),
             parent(), SLOT(slotUserDisconnected(int)));
 
     cm_->moveToThread(cThread_);
 
     cThread_->start();
+}
+
+void Socket::connect(int port, char * host) {
+    hostent * hp;
+    sockaddr_in server;
+
+    server.sin_family = AF_INET;
+    server.sin_port = htons(port);
+
+    if ((hp = gethostbyname(host)) == NULL) {
+        qDebug("Socket::connect(); Unknown server address: %s.", host);
+        return;
+    }
+    bcopy(hp->h_addr, (char *) &server.sin_addr, hp->h_length);
+
+    // Connecting to the server
+    if (::connect(socket_, (sockaddr *) &server, sizeof(server)) == -1) {
+        qDebug("Socket::connect(); Can't connect to server: %s.", host);
+        return;
+    }
 }
 
 
@@ -64,7 +84,17 @@ int Socket::read(QByteArray * buffer) {
         // bufferpointer, at least in MacOS... see read(2).
         bp += n;
         numBytesToRead -= n;
+
+        if (numBytesToRead == 0 || *(bp - 1) == '\n') {
+          *bp = '\0';
+          break;
+        }
     }
 
     return n;
+}
+
+int Socket::write(QByteArray * buffer) {
+    const char * bp = buffer->constData();
+    ::write(socket_, bp, buffer->size());
 }

@@ -96,7 +96,7 @@ void ConnectionManager::process(Socket * socket) {
     int socketD = socket->getSocketD();
 
     // Read from socket into buffer.
-    if(socket->read(buffer) == 0) {
+    if (socket->read(buffer) == 0) {
         // connection closed by client
 
         emit closedConnection(socketD);
@@ -104,6 +104,8 @@ void ConnectionManager::process(Socket * socket) {
         FD_CLR(socketD, &allset_);
         clients_->remove(socketD);
         delete socket;
+
+        return;
     }
 
     // Do stuff with received data here.
