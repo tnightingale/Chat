@@ -1,15 +1,20 @@
 #include "Socket.h"
 #include "ConnectionManager.h"
 
-Socket::Socket() {
+Socket::Socket(QObject * parent) : QObject(parent) {
     if ((socket_ = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         throw "Socket::Socket(); Could not create socket.";
     }
-
 }
 
+Socket::Socket(int socketDescriptor) 
+  : socket_(socketDescriptor), cThread_(NULL), cm_(NULL) {}
+
 Socket::~Socket() {
-    delete cm_;
+
+    if (cm_ != NULL) {
+        //delete cm_;
+    }
 
     if (cThread_ != NULL) {
         cThread_->quit();
@@ -26,18 +31,37 @@ void Socket::listen(int port) {
     server.sin_addr.s_addr = htonl(INADDR_ANY); 
 
     if (bind(socket_, (sockaddr *) &server, sizeof(server)) == -1) {
-      //SystemFatal("bind error");
-      qDebug("Socket::listen(); Could not bind listening socket.");
+        qDebug("Socket::listen(); Could not bind listening socket.");
     }
 
     // Listen for connections
     ::listen(socket_, 5);
     
-    ConnectionManager * cm = new ConnectionManager(socket_);
+    cm_ = new ConnectionManager(socket_);
     cThread_ = new QThread();
+
     connect(cThread_, SIGNAL(started()),
-            cm, SLOT(start()));
-    cm->moveToThread(cThread_);
+            cm_, SLOT(start()));
+    connect(cm_, SIGNAL(newConnection(int, char *)),
+            parent(), SLOT(slotNewUser(int, char *)));
+
+    cm_->moveToThread(cThread_);
 
     cThread_->start();
+}
+
+
+int Socket::read(QByteArray * buffer) {
+    int n = 0;
+    size_t numBytesToRead = BUFLEN;
+    char * bp = buffer->data();
+
+    while (numBytesToRead && (n = ::read(socket_, bp, numBytesToRead)) > 0) {
+        // I don't think it is actually necessary to increment the 
+        // bufferpointer, at least in MacOS... see read(2).
+        bp += n;
+        numBytesToRead -= n;
+    }
+
+    return n;
 }

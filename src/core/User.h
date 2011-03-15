@@ -1,7 +1,9 @@
 #include <QObject>
+#include <QDebug>
 
 class User : public QObject {
   Q_OBJECT
+
 private:
     QString * address_;
     QString * userName_;

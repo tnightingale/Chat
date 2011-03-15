@@ -2,7 +2,11 @@
 #include "../core/Socket.h"
 #include "../core/User.h"
 
-Server::Server() : listenSock_(new Socket()), users_(new QMap<int, User *>()) {}
+Server::Server() {
+  //: listenSock_(new Socket()), users_(new QMap<int, User *>()) {}
+  listenSock_ = new Socket(this);
+  users_ = new QMap<int, User *>();
+}
 
 Server::~Server() {
     delete listenSock_;

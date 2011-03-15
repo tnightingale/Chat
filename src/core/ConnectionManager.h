@@ -1,7 +1,9 @@
 #include <QObject>
+#include <QMap>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+class Socket;
 class ConnectionManager : public QObject {
   Q_OBJECT
 
@@ -10,17 +12,13 @@ private:
     int listenSocketD_;
 
     /** List of client socket descriptors. */
-    int clients_[FD_SETSIZE];
+    QMap<int, Socket *> * clients_;
 
     /** Descriptor set for select(). */
     fd_set allset_;
 
     /** Highest descriptor. */
     int maxfd_;
-
-    /** The most recent position a client socket descriptor was added to 
-     *  clients_. */
-    int maxi_;
 
 public:
     /**
@@ -39,7 +37,8 @@ public:
     virtual ~ConnectionManager();
 
 signals:
-    void newConnection(int newSD,  char * address);
+    void newConnection(int newSD, char * address);
+    void userSetNick(int newSD, char * nick);
 
 public slots:
     void start();
@@ -51,6 +50,17 @@ private:
      * @author Tom Nightingale
      */
     void accept();
+
+    /**
+     * Performs processing on a socket, this involves reading from the socket,
+     * forwarding messages on to their correct destination, detecting
+     * remote disconnections and closing sockets accordingly.
+     *
+     * @param a socket to be processed.
+     *
+     * @author Tom Nightingale.
+     */
+    void process(Socket * socket); 
 
 };
 

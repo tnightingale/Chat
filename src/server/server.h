@@ -4,31 +4,32 @@
 class Socket;
 class User;
 
-class Server : QObject {
+class Server : public QObject {
   Q_OBJECT
-    private:
-        /** The server's listening port. */
-        int port_;
 
-        /** The server's listening socket. */
-        Socket * listenSock_;
+private:
+    /** The server's listening port. */
+    int port_;
 
-        /** Collection of connected users. */
-        QMap<int, User *> * users_;
+    /** The server's listening socket. */
+    Socket * listenSock_;
 
-    public:
-        Server();
-        virtual ~Server();
+    /** Collection of connected users. */
+    QMap<int, User *> * users_;
 
-        /**
-         * Start listening for incoming connections.
-         *
-         * @param port The port number to listen to.
-         * 
-         * @author Tom Nightingale
-         */
-        void listen(int port = 7000);
+public:
+    Server();
+    virtual ~Server();
 
-    public slots:
-        void slotNewUser(int socketDescriptor, char * address);
+    /**
+     * Start listening for incoming connections.
+     *
+     * @param port The port number to listen to.
+     * 
+     * @author Tom Nightingale
+     */
+    void listen(int port = 7000);
+
+public slots:
+    void slotNewUser(int socketDescriptor, char * address);
 };

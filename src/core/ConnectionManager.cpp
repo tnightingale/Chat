@@ -1,21 +1,22 @@
 #include "ConnectionManager.h"
+#include "Socket.h"
 
 ConnectionManager::ConnectionManager(int listenSocketD) {
     listenSocketD_ = listenSocketD;
     maxfd_ = listenSocketD;
-    maxi_ = -1; // This could possibly be removed.
-    for (int i = 0; i < FD_SETSIZE; i++) {
-        clients_[i] = -1; // -1 indicates available entry
-    }
+
+    clients_ = new QMap<int, Socket *>();
 
     FD_ZERO(&allset_);
     FD_SET(listenSocketD_, &allset_);
 }
 
 ConnectionManager::~ConnectionManager() {
-    for (int i = 0; i < maxi_; i++) {
-        FD_CLR(clients_[i], &allset_);
-        close(clients_[i]);
+    foreach (Socket * clientSock, *clients_) {
+        int socket = clientSock->getSocketD();
+        FD_CLR(socket, &allset_);
+        close(socket);
+        delete clientSock;
     }
 }
 
@@ -27,8 +28,9 @@ void ConnectionManager::start() {
         rset = allset_;
         nready = select(maxfd_ + 1, &rset, NULL, NULL, NULL);
 
-        // New client connection.
+        // 1st check to see if there are any new connections.
         if (FD_ISSET(listenSocketD_, &rset)) {
+            // New client connection.
             this->accept();
 
             if (--nready <= 0) {
@@ -37,15 +39,32 @@ void ConnectionManager::start() {
             }
         }
 
-        // Aman's code continues here.
-    }
+        // 2nd check all client connections for data.
+        foreach (Socket * socket, *clients_) {
 
+            // If socket is not flagged, skip it.
+            if (!FD_ISSET(socket->getSocketD(), &rset)) {
+                continue;
+            }
+
+            // Data received, process socket.
+            qDebug("ConnectionManager::start(); (%d) Message received.", 
+                socket->getSocketD());
+            this->process(socket); 
+
+
+            // If no more flagged sockets, break out of loop. 
+            if (--nready <= 0) {
+                break;
+            }
+        }
+    }
 
 }
 
 void ConnectionManager::accept() {
-    int i = 0;
     int newSD = 0;
+    Socket * newSocket = NULL;
     sockaddr_in client_addr;
     socklen_t client_len = sizeof(client_addr);
 
@@ -55,16 +74,12 @@ void ConnectionManager::accept() {
         qDebug("ConnectionManager::start(); Accept error.");
     }
 
+    newSocket = new Socket(newSD);
+    clients_->insert(newSD, newSocket);
+
     emit newConnection(newSD, inet_ntoa(client_addr.sin_addr));
 
-    for (i = 0; i < FD_SETSIZE; i++) {
-        if (clients_[i] < 0) {
-            clients_[i] = newSD; // save descriptor
-            break;
-        }
-    }
-
-    if (i == FD_SETSIZE) {
+    if (clients_->size() == FD_SETSIZE) {
         qDebug("ConnectionManager::start(); Too many clients.");
         return;
     }
@@ -74,9 +89,22 @@ void ConnectionManager::accept() {
     if (newSD > maxfd_) {
         maxfd_ = newSD;
     }
+}
 
-    if (i > maxi_) {
-        // new max index in client[] array
-        maxi_ = i; 
+void ConnectionManager::process(Socket * socket) {
+    QByteArray * buffer = new QByteArray();
+    int socketD = socket->getSocketD();
+
+    // Read from socket into buffer.
+    if(socket->read(buffer) == 0) {
+        // connection closed by client
+        qDebug("ConnectionManager::start(); (%d) Remote closed connection.", socketD);
+
+        FD_CLR(socketD, &allset_);
+        clients_->remove(socketD);
+        delete socket;
     }
+
+    // Do stuff with received data here.
+    qDebug() << buffer->constData();
 }
