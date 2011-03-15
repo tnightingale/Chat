@@ -55,10 +55,7 @@ void ConnectionManager::accept() {
         qDebug("ConnectionManager::start(); Accept error.");
     }
 
-    emit newConnection(newSD);
-
-    qDebug("ConnectionManager::start(); Remote Address:  %s.", 
-        inet_ntoa(client_addr.sin_addr));
+    emit newConnection(newSD, inet_ntoa(client_addr.sin_addr));
 
     for (i = 0; i < FD_SETSIZE; i++) {
         if (clients_[i] < 0) {

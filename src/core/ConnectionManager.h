@@ -22,13 +22,6 @@ private:
      *  clients_. */
     int maxi_;
 
-    /**
-     * Accept connections and open client sockets. For internal use only.
-     *
-     * @author Tom Nightingale
-     */
-    void accept();
-
 public:
     /**
      * Constructor.
@@ -46,9 +39,18 @@ public:
     virtual ~ConnectionManager();
 
 signals:
-    void newConnection(int newSD);
+    void newConnection(int newSD,  char * address);
 
 public slots:
     void start();
+
+private:
+    /**
+     * Accept connections and open client sockets. For internal use only.
+     *
+     * @author Tom Nightingale
+     */
+    void accept();
+
 };
 
