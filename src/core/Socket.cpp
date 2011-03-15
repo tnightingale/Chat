@@ -96,5 +96,6 @@ int Socket::read(QByteArray * buffer) {
 
 int Socket::write(QByteArray * buffer) {
     const char * bp = buffer->constData();
-    ::write(socket_, bp, buffer->size());
+
+    return ::write(socket_, bp, buffer->size());
 }
