@@ -32,4 +32,5 @@ public:
 
 public slots:
     void slotNewUser(int socketDescriptor, char * address);
+    void slotUserDisconnected(int socketDiscriptor);
 };

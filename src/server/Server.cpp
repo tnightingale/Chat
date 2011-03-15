@@ -2,11 +2,8 @@
 #include "../core/Socket.h"
 #include "../core/User.h"
 
-Server::Server() {
-  //: listenSock_(new Socket()), users_(new QMap<int, User *>()) {}
-  listenSock_ = new Socket(this);
-  users_ = new QMap<int, User *>();
-}
+Server::Server()
+: listenSock_(new Socket(this)), users_(new QMap<int, User *>()) {}
 
 Server::~Server() {
     delete listenSock_;
@@ -26,4 +23,9 @@ void Server::listen(int port) {
 void Server::slotNewUser(int socketDescriptor, char * address) {
     User * user = new User(address);
     users_->insert(socketDescriptor, user);
+}
+
+void Server::slotUserDisconnected(int socketDiscriptor) {
+    User * user = users_->take(socketDiscriptor);
+    delete user;
 }

@@ -40,10 +40,13 @@ void Socket::listen(int port) {
     cm_ = new ConnectionManager(socket_);
     cThread_ = new QThread();
 
+    // Wiring up connections.
     connect(cThread_, SIGNAL(started()),
             cm_, SLOT(start()));
     connect(cm_, SIGNAL(newConnection(int, char *)),
             parent(), SLOT(slotNewUser(int, char *)));
+    connect(cm_, SIGNAL(closedConnection(int)),
+            parent(), SLOT(slotUserDisconnected(int)));
 
     cm_->moveToThread(cThread_);
 

@@ -38,6 +38,7 @@ public:
 
 signals:
     void newConnection(int newSD, char * address);
+    void closedConnection(int socketD);
     void userSetNick(int newSD, char * nick);
 
 public slots:

@@ -98,7 +98,8 @@ void ConnectionManager::process(Socket * socket) {
     // Read from socket into buffer.
     if(socket->read(buffer) == 0) {
         // connection closed by client
-        qDebug("ConnectionManager::start(); (%d) Remote closed connection.", socketD);
+
+        emit closedConnection(socketD);
 
         FD_CLR(socketD, &allset_);
         clients_->remove(socketD);

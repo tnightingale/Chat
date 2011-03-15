@@ -23,9 +23,16 @@ public:
     void setUserName(QString& userName) { userName_ = &userName; }
 
     /**
-     * Return's the user's username.
+     * Returns the user's username.
      *
      * @author Tom Nightingale
      */
-    QString getUserName() { return *userName_; }
+    const QString * getUserName() { return userName_; }
+
+    /**
+     * Returns the user's address.
+     *
+     * @author Tom Nightingale
+     */
+    const QString * getAddress() { return address_; }
 };
