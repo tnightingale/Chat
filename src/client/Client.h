@@ -1,5 +1,5 @@
-#include <QByteArray.h>
-#include <QObject.h>
+#include <QByteArray>
+#include <QObject>
 
 class Socket;
 class MainWindow;

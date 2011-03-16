@@ -1,5 +1,5 @@
-#include <QObject.h>
-#include <QMap.h>
+#include <QObject>
+#include <QMap>
 
 class Socket;
 class User;
