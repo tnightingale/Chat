@@ -67,10 +67,10 @@ void ConnectionManager::listenForMessages() {
     while (TRUE) {
         qDebug("ConnectionManager::listenForMessages(); Listening.");
         rset = allset_;
-        select(maxfd_, &rset, NULL, NULL, NULL);
+        select(listenSocketD_ + 1, &rset, NULL, NULL, NULL);
         qDebug("ConnectionManager::listenForMessages(); Select returned.");
 
-        if (!FD_ISSET(listenSocketD_, &rset)) {
+        if (FD_ISSET(listenSocketD_, &rset)) {
             this->process(parentSocket_);
         }
     }
