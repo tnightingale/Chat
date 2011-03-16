@@ -90,7 +90,7 @@ void ConnectionManager::accept() {
 }
 
 void ConnectionManager::process(Socket * socket) {
-    QByteArray * buffer = new QByteArray();
+    QByteArray * buffer = new QByteArray(BUFLEN, '\0');
     int socketD = socket->getSocketD();
     int bytesRead = 0;
 
