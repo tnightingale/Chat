@@ -28,6 +28,14 @@ private:
      */
     ConnectionManager * cm_;
 
+
+    /**
+     * Initialize the connection manager and it's associated thread.
+     *
+     * @author Tom Nightingale
+     */
+    void initConnectionManager();
+
 public:
     Socket(QObject * parent = 0);
     Socket(int socketDescriptor);

@@ -3,7 +3,7 @@
 #include "../../uic/ui_mainwindow.h"
 #include "../core/Socket.h"
 
-Client::Client(MainWindow * mw) : serverSocket_(new Socket()), mw_(mw) {
+Client::Client(MainWindow * mw) : serverSocket_(new Socket(this)), mw_(mw) {
     QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                      this, SLOT(slotConnect()));
     
@@ -29,5 +29,9 @@ void Client::slotConnect() {
 }
 
 void Client::slotPrepMessage(QString * message) {
+    qDebug() << *message;
+}
+
+void Client::slotDisplayMessage(QByteArray * message) {
     qDebug() << *message;
 }

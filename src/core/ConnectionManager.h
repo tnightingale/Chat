@@ -8,6 +8,9 @@ class ConnectionManager : public QObject {
   Q_OBJECT
 
 private:
+    /** The the socket which owns this connectionmanager. */
+    Socket * parentSocket_;
+
     /** The listening socket descriptor. */
     int listenSocketD_;
 
@@ -27,7 +30,7 @@ public:
      *
      * @author Tom Nightingale
      */
-    ConnectionManager(int listenSocketD);
+    ConnectionManager(Socket * parentSocket);
 
     /**
      * Destructor.
@@ -40,9 +43,12 @@ signals:
     void newConnection(int newSD, char * address);
     void closedConnection(int socketD);
     void userSetNick(int newSD, char * nick);
+    void messageReceived(QByteArray * buffer);
 
 public slots:
-    void start();
+    void listenForConnections();
+    void listenForMessages();
+    void broadcast(QByteArray * message);
 
 private:
     /**

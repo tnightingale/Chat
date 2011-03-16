@@ -1,9 +1,10 @@
 #include "ConnectionManager.h"
 #include "Socket.h"
 
-ConnectionManager::ConnectionManager(int listenSocketD) {
-    listenSocketD_ = listenSocketD;
-    maxfd_ = listenSocketD;
+ConnectionManager::ConnectionManager(Socket * parentSocket) {
+    parentSocket_ = parentSocket;
+    listenSocketD_ = parentSocket_->getSocketD();
+    maxfd_ = listenSocketD_;
 
     clients_ = new QMap<int, Socket *>();
 
@@ -20,7 +21,7 @@ ConnectionManager::~ConnectionManager() {
     }
 }
 
-void ConnectionManager::start() {
+void ConnectionManager::listenForConnections() {
     fd_set rset;
     int nready = 0;
 
@@ -58,6 +59,21 @@ void ConnectionManager::start() {
         }
     }
 
+}
+
+void ConnectionManager::listenForMessages() {
+    fd_set rset;
+
+    while (TRUE) {
+        qDebug("ConnectionManager::listenForMessages(); Listening.");
+        rset = allset_;
+        select(maxfd_, &rset, NULL, NULL, NULL);
+        qDebug("ConnectionManager::listenForMessages(); Select returned.");
+
+        if (!FD_ISSET(listenSocketD_, &rset)) {
+            this->process(parentSocket_);
+        }
+    }
 }
 
 void ConnectionManager::accept() {
@@ -110,4 +126,13 @@ void ConnectionManager::process(Socket * socket) {
     // Do stuff with received data here.
     QString message(*buffer);
     qDebug() << QString().setNum(bytesRead) << ": " << message;
+
+    emit messageReceived(buffer);
+}
+
+void ConnectionManager::broadcast(QByteArray * message) {
+    qDebug("ConnectionManager::broadcast(); Broadcasting.");
+    foreach (Socket * socket, *clients_) {
+        socket->write(message);
+    }    
 }

@@ -37,19 +37,17 @@ void Socket::listen(int port) {
     // Listen for connections
     ::listen(socket_, 5);
     
-    cm_ = new ConnectionManager(socket_);
-    cThread_ = new QThread();
+    this->initConnectionManager();
 
     // Wiring up connections.
     QObject::connect(cThread_, SIGNAL(started()),
-            cm_, SLOT(start()));
+                     cm_, SLOT(listenForConnections()));
     QObject::connect(cm_, SIGNAL(newConnection(int, char *)),
-            parent(), SLOT(slotNewUser(int, char *)));
+                     this->parent(), SLOT(slotNewUser(int, char *)));
     QObject::connect(cm_, SIGNAL(closedConnection(int)),
-            parent(), SLOT(slotUserDisconnected(int)));
-
-    cm_->moveToThread(cThread_);
-
+                     this->parent(), SLOT(slotUserDisconnected(int)));
+    QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
+                     cm_, SLOT(broadcast(QByteArray *)));
     cThread_->start();
 }
 
@@ -72,6 +70,14 @@ bool Socket::connect(int port, const char * host) {
         return false;
     }
 
+    this->initConnectionManager();
+    // Wiring up connections.
+    QObject::connect(cThread_, SIGNAL(started()),
+                     cm_, SLOT(listenForMessages()));
+    QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
+                     this->parent(), SLOT(slotDisplayMessage(QByteArray *)));
+    cThread_->start();
+
     return true;
 }
 
@@ -93,8 +99,6 @@ int Socket::read(QByteArray * buffer) {
         }
     }
 
-    qDebug("Socket::read(); Left reading loop with n = %d.", n);
-
     return n;
 }
 
@@ -102,4 +106,11 @@ int Socket::write(QByteArray * buffer) {
     const char * bp = buffer->constData();
 
     return ::write(socket_, bp, buffer->size());
+}
+
+void Socket::initConnectionManager() {
+    cm_ = new ConnectionManager(this);
+    cThread_ = new QThread();
+
+    cm_->moveToThread(cThread_);
 }

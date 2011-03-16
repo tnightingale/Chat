@@ -20,4 +20,5 @@ public:
 public slots:
     void slotConnect();
     void slotPrepMessage(QString * message);
+    void slotDisplayMessage(QByteArray * message);
 };
