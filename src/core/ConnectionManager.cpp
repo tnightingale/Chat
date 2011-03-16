@@ -65,10 +65,8 @@ void ConnectionManager::listenForMessages() {
     fd_set rset;
 
     while (TRUE) {
-        qDebug("ConnectionManager::listenForMessages(); Listening.");
         rset = allset_;
         select(listenSocketD_ + 1, &rset, NULL, NULL, NULL);
-        qDebug("ConnectionManager::listenForMessages(); Select returned.");
 
         if (FD_ISSET(listenSocketD_, &rset)) {
             this->process(parentSocket_);
@@ -131,7 +129,6 @@ void ConnectionManager::process(Socket * socket) {
 }
 
 void ConnectionManager::broadcast(QByteArray * message) {
-    qDebug("ConnectionManager::broadcast(); Broadcasting.");
     foreach (Socket * socket, *clients_) {
         socket->write(message);
     }    

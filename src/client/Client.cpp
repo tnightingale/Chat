@@ -29,9 +29,11 @@ void Client::slotConnect() {
 }
 
 void Client::slotPrepMessage(QString * message) {
-    qDebug() << *message;
+    qDebug() << "Msg tx: " << *message;
+    QByteArray data = message->toAscii();
+    serverSocket_->write(&data);
 }
 
 void Client::slotDisplayMessage(QByteArray * message) {
-    qDebug() << *message;
+    qDebug() << "Msg rx: " << *message;
 }
