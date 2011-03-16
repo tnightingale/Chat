@@ -122,9 +122,6 @@ void ConnectionManager::process(Socket * socket) {
     }
 
     // Do stuff with received data here.
-    QString message(*buffer);
-    qDebug() << QString().setNum(bytesRead) << ": " << message;
-
     emit messageReceived(buffer);
 }
 

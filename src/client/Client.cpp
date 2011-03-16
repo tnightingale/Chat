@@ -1,6 +1,8 @@
 #include "./Client.h"
 #include "./mainwindow.h"
 #include "../../uic/ui_mainwindow.h"
+#include "./roomwindow.h"
+#include "../../uic/ui_roomwindow.h"
 #include "../core/Socket.h"
 
 Client::Client(MainWindow * mw) : serverSocket_(new Socket(this)), mw_(mw) {
@@ -16,9 +18,7 @@ Client::~Client() {
 }
 
 void Client::connect(int port, QString * host) {
-    QByteArray * data = new QByteArray("Hello world!\n");
     serverSocket_->connect(port, host->toAscii().constData());
-    serverSocket_->write(data);
 }
 
 void Client::slotConnect() {
@@ -30,10 +30,15 @@ void Client::slotConnect() {
 
 void Client::slotPrepMessage(QString * message) {
     qDebug() << "Msg tx: " << *message;
+
+    // Messages are terminated with '\n'.
+    *message += '\n';
     QByteArray data = message->toAscii();
     serverSocket_->write(&data);
 }
 
-void Client::slotDisplayMessage(QByteArray * message) {
-    qDebug() << "Msg rx: " << *message;
+void Client::slotDisplayMessage(QByteArray * data) {
+    qDebug() << "Msg rx: " << *data;
+    QString message(*data);
+    mw_->getRW()->getUi()->roomLog->append(message);
 }
