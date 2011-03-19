@@ -1,3 +1,3 @@
-SERVER_HDRS  += ./server/server.h
+SERVER_HDRS  += ./server/Server.h
 SERVER_SRCS  += ./server/main.cpp \
-                ./server/server.cpp
+                ./server/Server.cpp
