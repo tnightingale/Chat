@@ -68,9 +68,11 @@ void Client::initRoom(QString name) {
     mw_->getRooms()->insert(name, rw);
     mw_->getRooms()->value(name)->getUi()->rommName->setText(name);
     mw_->getRooms()->value(name)->setWindowTitle(name);
-    QString username = chatRooms_->at(chatRooms_->size() - 1)->getUser(0).second;
-    mw_->getRooms()->value(name)->getUi()->userList->addItem(username);
-    mw_->getRooms()->value(name)->show();
+
+    //QString username = chatRooms_->at(chatRooms_->size() - 1)->getUser(0).second;
+
+    //mw_->getRooms()->value(name)->getUi()->userList->addItem(username);
+    //mw_->getRooms()->value(name)->show();
 }
 
 void Client::sendUserList(Room room) {
