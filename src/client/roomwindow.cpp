@@ -1,5 +1,6 @@
 #include "roomwindow.h"
 #include "ui_roomwindow.h"
+#include "../core/Message.h"
 
 RoomWindow::RoomWindow(QWidget *parent) :
     QWidget(parent),
@@ -20,7 +21,7 @@ bool RoomWindow::eventFilter(QObject * obj, QEvent * event) {
             message->append(getUi()->sendArea->toPlainText());
             getUi()->sendArea->clear();
 
-            emit sendMessage(message);
+            emit sendMessage(message, ui->rommName->text());
 
             return true;
         }

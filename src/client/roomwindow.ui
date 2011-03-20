@@ -51,6 +51,12 @@
      <height>71</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
   </widget>
   <widget class="QTextBrowser" name="roomLog">
    <property name="geometry">
@@ -61,18 +67,33 @@
      <height>261</height>
     </rect>
    </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="userList">
+  <widget class="QListWidget" name="userList">
    <property name="geometry">
     <rect>
-     <x>350</x>
-     <y>20</y>
-     <width>121</width>
+     <x>345</x>
+     <y>21</y>
+     <width>131</width>
      <height>341</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="resizeMode">
+    <enum>QListView::Adjust</enum>
    </property>
   </widget>
  </widget>

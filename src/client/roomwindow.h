@@ -20,7 +20,7 @@ public:
 
     bool eventFilter(QObject * obj, QEvent * event);
 signals:
-    void sendMessage(QString * message);
+    void sendMessage(QString * message, QString roomName);
 
 private:
     Ui::RoomWindow *ui;

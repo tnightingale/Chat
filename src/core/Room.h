@@ -18,9 +18,11 @@ public:
     Room(QString name);
     virtual ~Room();
 
-    QString getName() {
-        return name_;
-    }
+    QString getName() { return name_; }
+
+    QVector<QPair<QString, QString> >* getUsers() { return users_; }
+
+    QPair<QString, QString> getUser(int index) { return users_->at(index); }
 
     void addUser(User* user);
 
