@@ -20,23 +20,17 @@ public:
     ~MainWindow();
 
     Ui::MainWindow * getUi() { return ui; }
-    RoomWindow * getRW() {return rw; }
+
+    QMap<QString, RoomWindow*>* getRooms() {
+        return rooms;
+    }
 
 signals:
     void sendMessage(QString * message);
 
-public slots:
-    void connectRoom();
-
 protected:
     Ui::MainWindow *ui;
-    RoomWindow* rw;
-
-    /**
-     *
-     *
-     */
-    bool eventFilter(QObject * obj, QEvent * event);
+    QMap<QString, RoomWindow*>* rooms;
 };
 
 #endif // MAINWINDOW_H

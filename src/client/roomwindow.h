@@ -2,6 +2,7 @@
 #define ROOMWINDOW_H
 
 #include <QWidget>
+#include <QKeyEvent>
 
 namespace Ui {
     class RoomWindow;
@@ -16,6 +17,10 @@ public:
     ~RoomWindow();
 
     Ui::RoomWindow * getUi() { return ui; }
+
+    bool eventFilter(QObject * obj, QEvent * event);
+signals:
+    void sendMessage(QString * message);
 
 private:
     Ui::RoomWindow *ui;

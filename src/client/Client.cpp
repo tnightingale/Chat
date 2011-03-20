@@ -17,15 +17,33 @@ Client::~Client() {
     delete serverSocket_;
 }
 
-void Client::connect(int port, QString * host) {
-    serverSocket_->connect(port, host->toAscii().constData());
+bool Client::connect(int port, QString * host) {
+    return serverSocket_->connect(port, host->toAscii().constData());
 }
 
 void Client::slotConnect() {
     QString host = mw_->getUi()->ipField->text();
     int port = mw_->getUi()->portField->text().toInt();
+    QString name = mw_->getUi()->roomField->text();
 
-    this->connect(port, &host);
+    if (this->connect(port, &host)) {
+        mw_->getUi()->ipField->setReadOnly(true);
+        mw_->getUi()->portField->setReadOnly(true);
+        mw_->getUi()->nameField->setReadOnly(true);
+        QObject::disconnect(mw_->getUi()->connectButton, SIGNAL(clicked()),
+                   this, SLOT(slotConnect()));
+        QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
+                this, SLOT(addRoom()));
+
+        RoomWindow* rw = new RoomWindow();
+        rw->getUi()->sendArea->installEventFilter(rw);
+
+        QObject::connect(rw, SIGNAL(sendMessage(QString*)),
+                         this, SLOT(slotPrepMessage(QString*)));
+
+        mw_->getRooms()->insert(name, rw);
+        mw_->getRooms()->value(name)->show();
+    }
 }
 
 void Client::slotPrepMessage(QString * message) {
@@ -40,5 +58,21 @@ void Client::slotPrepMessage(QString * message) {
 void Client::slotDisplayMessage(QByteArray * data) {
     qDebug() << "Msg rx: " << *data;
     QString message(*data);
-    mw_->getRW()->getUi()->roomLog->append(message);
+    mw_->getRooms()->value(tr(""))->getUi()->roomLog->append(message);
+}
+
+void Client::addRoom() {
+    QString name = mw_->getUi()->roomField->text();
+    if (!mw_->getRooms()->contains(name)) {
+        RoomWindow* rw = new RoomWindow();
+        rw->getUi()->sendArea->installEventFilter(rw);
+
+        QObject::connect(rw, SIGNAL(sendMessage(QString*)),
+                         this, SLOT(slotPrepMessage(QString*)));
+
+        mw_->getRooms()->insert(name, rw);
+        mw_->getRooms()->value(name)->show();
+    } else {
+        mw_->getRooms()->value(name)->show();
+    }
 }

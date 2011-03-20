@@ -15,10 +15,14 @@ public:
     Client(MainWindow * mw);
     virtual ~Client();
 
-    void connect(int port, QString * host);
+    bool connect(int port, QString * host);
+
+signals:
+    void newRoom();
 
 public slots:
     void slotConnect();
     void slotPrepMessage(QString * message);
     void slotDisplayMessage(QByteArray * message);
+    void addRoom();
 };
