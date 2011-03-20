@@ -42,7 +42,7 @@ public:
 
     QByteArray getMessage() { return data_; }
 
-    QVector<QString> getUserList();
+    QString getUserList();
 
     QByteArray* serialize();
 

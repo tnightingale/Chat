@@ -35,5 +35,5 @@ public slots:
     void slotPrepMessage(QString * message, QString roomName);
     void slotDisplayMessage(QByteArray * message);
     //void addRoom();
-    //void updateUsers(QByteArray * buffer);
+    void updateUsers(QByteArray * buffer);
 };

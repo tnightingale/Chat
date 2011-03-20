@@ -96,9 +96,15 @@ void Client::sendUserList(Room room) {
     //               (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
 
     QByteArray* msg = new QByteArray();
+    QString userString("");
     QDataStream ds(msg, QIODevice::WriteOnly);
     ds.setVersion(QDataStream::Qt_4_7);
-    ds << room.getUsers();
+
+    foreach (User * user, room.getUsers()) {
+        userString.append(user->toString() + tr(","));
+    }
+
+    ds << userString;
     message->setData(*msg);
     serverSocket_->write(message->serialize());
 }
@@ -140,20 +146,18 @@ void Client::slotDisplayMessage(QByteArray * data) {
             ->roomLog->setFontWeight(QFont::Normal);
     mw_->getRooms()->value(msg->getRoom())->getUi()->roomLog->append(message);
 }
-/*
+
 void Client::updateUsers(QByteArray* buffer) {
     Message *message = new Message();
     message->deserialize(buffer);
-    QVector<QString> users(message->getUserList());
+    QString users(message->getUserList());
     QSet<User*> userList = QSet<User*>();
 
     int mid = 0;
-    QVectorIterator<QString> user(users);
-    while (user.hasNext()) {
-        QString string = user.next();
-        mid = string.indexOf(tr("@"));
-        User* newUser = new User(string.right(mid).toAscii().data());
-        newUser->setUserName(*(new QString(string.left(mid))));
+    QStringList userStrings = users.split(tr(","), QString::SkipEmptyParts);
+    foreach (QString userString, userStrings) {
+        mid = userString.indexOf(tr("@"));
+        User* newUser = new User(userString.right(mid).toAscii().data());
         userList.insert(newUser);
     }
 
@@ -162,4 +166,3 @@ void Client::updateUsers(QByteArray* buffer) {
         chatRooms_->value(message->getRoom())->addUser(newUser.next());
     }
 }
-*/
