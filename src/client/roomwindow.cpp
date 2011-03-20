@@ -6,6 +6,7 @@ RoomWindow::RoomWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::RoomWindow) {
     ui->setupUi(this);
+    ui->sendArea->installEventFilter(this);
 }
 
 RoomWindow::~RoomWindow() {

@@ -1,5 +1,6 @@
 #include <QByteArray>
 #include <QObject>
+#include <QMap>
 
 class Socket;
 class MainWindow;
@@ -12,7 +13,7 @@ class Client : public QObject {
 private:
     Socket * serverSocket_;
     MainWindow * mw_;
-    QVector<Room*> * chatRooms_;
+    QMap<QString, Room *> * chatRooms_;
   
 public:
     Client(MainWindow * mw);

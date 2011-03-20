@@ -9,7 +9,7 @@
 #include "../core/ConnectionManager.h"
 
 Client::Client(MainWindow * mw) : serverSocket_(new Socket(this)), mw_(mw) {
-    chatRooms_ = new QVector<Room*>();
+    chatRooms_ = new QMap<QString, Room *>();
 
     QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                      this, SLOT(slotConnect()));
@@ -26,18 +26,17 @@ bool Client::connect(int port, QString * host) {
 void Client::slotConnect() {
     QString host = mw_->getUi()->ipField->text();
     int port = mw_->getUi()->portField->text().toInt();
-    QString name = mw_->getUi()->roomField->text();
 
     if (this->connect(port, &host)) {
         mw_->getUi()->ipField->setReadOnly(true);
         mw_->getUi()->portField->setReadOnly(true);
         mw_->getUi()->nameField->setReadOnly(true);
         QObject::disconnect(mw_->getUi()->connectButton, SIGNAL(clicked()),
-                   this, SLOT(slotConnect()));
+                            this, SLOT(slotConnect()));
         QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
-                this, SLOT(addRoom()));
+                         this, SLOT(addRoom()));
 
-        initRoom(name);
+        addRoom();
     }
 }
 
@@ -55,16 +54,13 @@ void Client::addRoom() {
 }
 
 void Client::initRoom(QString name) {
-    if (QString::compare(name, tr("")) == 0) {
-        name = tr("Chat Room");
-    }
-
     Room* room = new Room(name);
-    room->addUser(QPair<QString, QString>
-                  (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
-    chatRooms_->append(room);
     RoomWindow* rw = new RoomWindow();
-    rw->getUi()->sendArea->installEventFilter(rw);
+
+    room->addUser(QPair<QString, QString>
+                 (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
+
+    chatRooms_->insert(room->getName(), room);
 
     QObject::connect(rw, SIGNAL(sendMessage(QString*, QString)),
                      this, SLOT(slotPrepMessage(QString*, QString)));
