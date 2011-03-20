@@ -1,3 +1,6 @@
+#ifndef NIGHTINGALE_USER_H
+#define NIGHTINGALE_USER_H
+
 #include <QObject>
 #include <QDebug>
 
@@ -36,3 +39,5 @@ public:
      */
     const QString * getAddress() { return address_; }
 };
+
+#endif

@@ -27,6 +27,18 @@ public:
     void addUser(User* user);
 
     void addUser(QPair<QString, QString> user);
+
+    /**
+     * A new message has been posted in this room.
+     *
+     * @param msg The message that has been posted.
+     * 
+     * @author Tom Nightingale
+     */
+    void newMessage(Message * msg);
+
+signals:
+    void broadcastMessage(QByteArray * message, QList<User *> * users);
 };
 
 #endif // ROOM_H

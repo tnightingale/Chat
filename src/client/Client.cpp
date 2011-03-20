@@ -77,8 +77,8 @@ void Client::sendUserList(Room room) {
     Message* message = new Message();
     message->setType(USR_LIST);
     message->setRoom(room.getName());
-    message->setSender(QPair<QString, QString>
-                   (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
+    //message->setSender(QPair<QString, QString>
+    //               (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
 
     QByteArray* msg = new QByteArray();
     QDataStream ds(msg, QIODevice::WriteOnly);
@@ -100,7 +100,7 @@ void Client::slotPrepMessage(QString * message, QString roomName) {
     msg->setRoom(roomName);
     foreach (Room* room, *chatRooms_) {
         if (QString::compare(room->getName(), roomName) == 0) {
-            msg->setSender(room->getUser(0));
+            //msg->setSender(room->getUser(0));
         }
     }
     msg->setData(data);

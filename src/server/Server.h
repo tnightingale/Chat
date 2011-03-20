@@ -3,6 +3,7 @@
 
 class Socket;
 class User;
+class Room;
 
 class Server : public QObject {
   Q_OBJECT
@@ -16,6 +17,9 @@ private:
 
     /** Collection of connected users. */
     QMap<int, User *> * users_;
+
+    /** Collection of rooms. */
+    QMap<QString, Room *> * rooms_;
 
 public:
     Server();
@@ -33,4 +37,5 @@ public:
 public slots:
     void slotNewUser(int socketDescriptor, char * address);
     void slotUserDisconnected(int socketDiscriptor);
+    void slotMessageRx(QByteArray * buffer);
 };

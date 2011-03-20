@@ -25,7 +25,27 @@ void Server::slotNewUser(int socketDescriptor, char * address) {
     users_->insert(socketDescriptor, user);
 }
 
+//void Server::slotJoinRoom(
+
 void Server::slotUserDisconnected(int socketDiscriptor) {
     User * user = users_->take(socketDiscriptor);
     delete user;
+}
+
+void Server::slotMessageRx(QByteArray * buffer) {
+    Message * msg = new Message(buffer);
+
+    switch (msg->getType()) {
+        case USR_LIST:
+        //emit userListReceived(msg->serialize());
+          break;
+
+        case CHAT_MSG:
+          rooms_->value(msg->getRoom())->newMessage(msg);
+          break;
+
+        default:
+          // Shouldn't get here.
+          break;
+    }
 }

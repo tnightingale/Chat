@@ -123,13 +123,14 @@ void ConnectionManager::process(Socket * socket) {
     }
 
     // Do stuff with received data here.
-    Message* msg = new Message();
-    msg->deserialize(buffer);
-    if (msg->getType() == USR_LIST) {
-        emit userListReceived(msg->serialize());
-    } else {
-        emit messageReceived(msg->serialize());
-    }
+    //Message* msg = new Message();
+    //msg->deserialize(buffer);
+    //if (msg->getType() == USR_LIST) {
+    //    emit userListReceived(msg->serialize());
+    //} else {
+    //    emit messageReceived(msg->serialize());
+    //}
+    emit messageReceived(buffer);
 }
 
 void ConnectionManager::broadcast(QByteArray * message) {

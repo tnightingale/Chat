@@ -1,5 +1,9 @@
 #include "Message.h"
 
+Message::Message(QByteArray * buffer) {
+    deserialize(buffer);
+}
+
 QByteArray* Message::serialize() {
     QByteArray* msg = new QByteArray();
     QDataStream ds(msg, QIODevice::WriteOnly);
@@ -19,6 +23,11 @@ void Message::deserialize(QByteArray* msg) {
        >> sender_
        >> room_
        >> data_;
+}
+
+void Message::setSender(User * user) {
+    sender_.first = *(user->getAddress());
+    sender_.second = *(user->getUserName());
 }
 
 QVector<QPair<QString, QString> > Message::getUserList() {

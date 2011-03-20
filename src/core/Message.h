@@ -21,8 +21,10 @@ private:
     QByteArray data_;
 
 public:
-    Message() {}
+    Message() {} 
+    Message(QByteArray * buffer); 
     virtual ~Message() {}
+
 
     qint8 getType() { return type_; }
 
@@ -30,7 +32,7 @@ public:
 
     QPair<QString, QString> getSender() { return sender_; }
 
-    void setSender(QPair<QString, QString> s) { sender_ = s; }
+    void setSender(User * user);
 
     QString getRoom() { return room_; }
 

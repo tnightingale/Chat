@@ -47,7 +47,7 @@ void Socket::listen(int port) {
     QObject::connect(cm_, SIGNAL(closedConnection(int)),
                      this->parent(), SLOT(slotUserDisconnected(int)));
     QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
-                     cm_, SLOT(broadcast(QByteArray *)));
+                     this->parent(), SLOT(slotMessageRx(QByteArray *)));
     QObject::connect(cm_, SIGNAL(userListReceived(QByteArray *)),
                      cm_, SLOT(broadcast(QByteArray *)));
     cThread_->start();
