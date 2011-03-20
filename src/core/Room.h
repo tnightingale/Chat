@@ -4,20 +4,23 @@
 #include <QObject>
 #include <QVector>
 #include <QString>
+#include "Message.h"
 
 class User;
-class Message;
 
 class Room : public QObject {
     Q_OBJECT
 private:
-    QVector<User*> users;
-    QVector<Message*> messages;
-    QString name;
+    QVector<QPair<QString, QString> > * users_;
+    QString name_;
 
 public:
-    Room(){}
-    ~Room(){}
+    Room(QString name);
+    virtual ~Room();
+
+    QString getName() {
+        return name_;
+    }
 };
 
 #endif // ROOM_H
