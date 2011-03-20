@@ -1,16 +1,25 @@
 #include "Server.h"
 #include "../core/Socket.h"
 #include "../core/User.h"
+#include "../core/Room.h"
+#include "../core/Message.h"
 
 Server::Server()
-: listenSock_(new Socket(this)), users_(new QMap<int, User *>()) {}
+: listenSock_(new Socket(this)), users_(new QMap<int, User *>()),
+  rooms_(new QMap<QString, Room * >()) {}
 
 Server::~Server() {
     delete listenSock_;
 
+    // Cleaning up rooms objects.
+    foreach (Room * room, *rooms_) {
+        delete room;
+    }
+    delete rooms_;
+
     // Cleaning up users objects.
     foreach (User * user, *users_) {
-      delete user;
+        delete user;
     }
     delete users_;
 }

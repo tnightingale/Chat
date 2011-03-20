@@ -2,7 +2,7 @@
 #define ROOM_H
 
 #include <QObject>
-#include <QVector>
+#include <QSet>
 #include <QString>
 #include "Message.h"
 
@@ -11,7 +11,7 @@ class User;
 class Room : public QObject {
     Q_OBJECT
 private:
-    QVector<QPair<QString, QString> > * users_;
+    QSet<User *> * users_;
     QString name_;
 
 public:
@@ -24,9 +24,9 @@ public:
 
     QPair<QString, QString> getUser(int index) { return users_->at(index); }
 
-    void addUser(User* user);
+    void addUser(User * user);
 
-    void addUser(QPair<QString, QString> user);
+    //void addUser(QPair<QString, QString> user);
 
     /**
      * A new message has been posted in this room.
