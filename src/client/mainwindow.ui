@@ -28,6 +28,9 @@ background-image: url(:/img/th_nightingale.png);
       <height>27</height>
      </rect>
     </property>
+    <property name="text">
+     <string>user</string>
+    </property>
    </widget>
    <widget class="QLabel" name="userLabel">
     <property name="geometry">
@@ -74,6 +77,9 @@ background-image: url(:/img/th_nightingale.png);
       <height>27</height>
      </rect>
     </property>
+    <property name="text">
+     <string>192.168.0.1</string>
+    </property>
    </widget>
    <widget class="QLabel" name="ipLabel">
     <property name="geometry">
@@ -96,6 +102,9 @@ background-image: url(:/img/th_nightingale.png);
       <width>113</width>
       <height>27</height>
      </rect>
+    </property>
+    <property name="text">
+     <string>7000</string>
     </property>
    </widget>
    <widget class="QLabel" name="portLabel">
