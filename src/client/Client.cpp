@@ -131,34 +131,21 @@ void Client::slotDisplayMessage(QByteArray * data) {
 void Client::updateUsers(QByteArray* buffer) {
     Message *message = new Message();
     message->deserialize(buffer);
-    //int index = 0;
-    QVector<QPair<QString, QString> > users(message->getUserList());
-    //QListWidget* list = mw_->getRooms()->value(message->getRoom())
-    //                   ->getUi()->userList;
-    //QString username(mw_->getUi()->nameField->text());
+    QVector<QString> users(message->getUserList());
+    QSet<User*> userList = QSet<User*>();
 
-    foreach (Room* room, *chatRooms_) {
-        if (QString::compare(room->getName(), message->getRoom()) == 0) {
-            if (room->getUsers()->size() != users.size()) {
-                mw_->getRooms()->value(message->getRoom())->getUi()
-                        ->userList->clear();
-                QVectorIterator<QPair<QString, QString> > i(users);
-                while (i.hasNext()) {
-                    room->addUser(i.next());
-                }/*
-                foreach (QPair<QString, QString> user, users) {
-                    room->addUser(user);
-                }*/
-                QVectorIterator<QPair<QString, QString> > k(users);
-                while (k.hasNext()) {
-                    mw_->getRooms()->value(message->getRoom())->getUi()
-                            ->userList->addItem(k.next().second);
-                }/*
-                foreach (QPair<QString, QString> user, users) {
-                    mw_->getRooms()->value(message->getRoom())->getUi()
-                            ->userList->append(user.second);
-                }*/
-            }
-        }
+    int mid = 0;
+    QVectorIterator<QString> user(users);
+    while (user.hasNext()) {
+        QString string = user.next();
+        mid = string.indexOf(tr("@"));
+        User* newUser = new User(string.right(mid).toAscii().data());
+        newUser->setUserName(*(new QString(string.left(mid))));
+        userList.insert(newUser);
+    }
+
+    QSetIterator<User*> newUser(userList);
+    while (newUser.hasNext()) {
+        chatRooms_->value(message->getRoom())->addUser(newUser.next());
     }
 }
