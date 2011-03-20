@@ -71,13 +71,15 @@ void Server::userJoinRoom(User * sender, Message * msg) {
 }
 
 QByteArray Server::prepareUserList(QSet<User *> users) {
-    QByteArray userList;
-    QDataStream ds(userList);
+    QVector<QString> userVector = QVector<QString>();
+    QByteArray* userList = new QByteArray();
+    QDataStream ds(userList, QIODevice::WriteOnly);
+    ds.setVersion(QDataStream::Qt_4_7);
     foreach (User * user, users) {
-        ds << *user << ","; 
+        userVector.append(user->toString());
     } 
-
-    return userList;
+    ds << userVector;
+    return *userList;
 }
 
 void Server::slotMessageRx(int userSD, QByteArray * buffer) {
