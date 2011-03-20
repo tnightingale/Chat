@@ -1,5 +1,6 @@
 #include "ConnectionManager.h"
 #include "Socket.h"
+#include "Message.h"
 
 ConnectionManager::ConnectionManager(Socket * parentSocket) {
     parentSocket_ = parentSocket;
@@ -122,7 +123,13 @@ void ConnectionManager::process(Socket * socket) {
     }
 
     // Do stuff with received data here.
-    emit messageReceived(buffer);
+    Message* msg = new Message();
+    msg->deserialize(buffer);
+    if (msg->getType() == USR_LIST) {
+        emit userListReceived(msg);
+    } else {
+        emit messageReceived(msg->serialize());
+    }
 }
 
 void ConnectionManager::broadcast(QByteArray * message) {

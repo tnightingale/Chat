@@ -4,6 +4,7 @@
 #include <arpa/inet.h>
 
 class Socket;
+class Message;
 class ConnectionManager : public QObject {
   Q_OBJECT
 
@@ -44,6 +45,7 @@ signals:
     void closedConnection(int socketD);
     void userSetNick(int newSD, char * nick);
     void messageReceived(QByteArray * buffer);
+    void userListReceived(Message* message);
 
 public slots:
     void listenForConnections();

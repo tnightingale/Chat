@@ -4,6 +4,7 @@
 class Socket;
 class MainWindow;
 class Room;
+class Message;
 
 class Client : public QObject {
   Q_OBJECT
@@ -21,6 +22,8 @@ public:
 
     void initRoom(QString name);
 
+    void sendUserList(Room room);
+
 signals:
     void newRoom();
 
@@ -29,4 +32,5 @@ public slots:
     void slotPrepMessage(QString * message, QString roomName);
     void slotDisplayMessage(QByteArray * message);
     void addRoom();
+    void updateUsers(Message * message);
 };
