@@ -130,7 +130,7 @@ void ConnectionManager::process(Socket * socket) {
     //} else {
     //    emit messageReceived(msg->serialize());
     //}
-    emit messageReceived(buffer);
+    emit messageReceived(socketD, buffer);
 }
 
 void ConnectionManager::broadcast(QByteArray * message, QSet<int> * clients) {

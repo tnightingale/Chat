@@ -41,11 +41,11 @@ void Server::slotUserDisconnected(int socketDiscriptor) {
 }
 
 void Server::forwardMessage(User * sender, Message * msg) {
-    QSet<User *> recipients = rooms_->value(msg->getRoom())->getUsers();
+    QSet<User *> recipients(rooms_->value(msg->getRoom())->getUsers());
     QSet<int> * recipientDs = new QSet<int>();
 
     foreach (User * user, recipients) {
-        if (user->getSocketD() == sender->getSocketD()) {
+        if (sender != NULL && user->getSocketD() == sender->getSocketD()) {
             continue;
         }
         recipientDs->insert(user->getSocketD()); 
@@ -55,11 +55,13 @@ void Server::forwardMessage(User * sender, Message * msg) {
 }
 
 void Server::userJoinRoom(User * sender, Message * msg) {
-    QString roomName(msg->getMessage());
+    QString roomName(msg->getRoom());
     Room * room = NULL;
+
     if ((room = rooms_->value(roomName)) == 0) {
         room = new Room(roomName);
         rooms_->insert(roomName, room);
+        qDebug("Server::userJoinRoom(); Room created (%s)", roomName.toAscii().data());
     }
     room->addUser(sender);
 
@@ -72,13 +74,17 @@ void Server::userJoinRoom(User * sender, Message * msg) {
 
 QByteArray Server::prepareUserList(QSet<User *> users) {
     QVector<QString> userVector = QVector<QString>();
-    QByteArray* userList = new QByteArray();
+    QByteArray * userList = new QByteArray();
     QDataStream ds(userList, QIODevice::WriteOnly);
     ds.setVersion(QDataStream::Qt_4_7);
+
     foreach (User * user, users) {
         userVector.append(user->toString());
     } 
+
+    qDebug("Server::prepareUserList(); %s", userList->data());
     ds << userVector;
+
     return *userList;
 }
 
