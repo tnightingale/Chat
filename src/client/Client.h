@@ -3,6 +3,7 @@
 
 class Socket;
 class MainWindow;
+class Room;
 
 class Client : public QObject {
   Q_OBJECT
@@ -10,12 +11,15 @@ class Client : public QObject {
 private:
     Socket * serverSocket_;
     MainWindow * mw_;
+    QVector<Room*> * chatRooms_;
   
 public:
     Client(MainWindow * mw);
     virtual ~Client();
 
     bool connect(int port, QString * host);
+
+    void initRoom(QString name);
 
 signals:
     void newRoom();

@@ -21,6 +21,10 @@ public:
     QString getName() {
         return name_;
     }
+
+    void addUser(User* user);
+
+    void addUser(QPair<QString, QString> user);
 };
 
 #endif // ROOM_H

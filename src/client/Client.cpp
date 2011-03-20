@@ -4,8 +4,11 @@
 #include "./roomwindow.h"
 #include "../../uic/ui_roomwindow.h"
 #include "../core/Socket.h"
+#include "../core/Room.h"
 
 Client::Client(MainWindow * mw) : serverSocket_(new Socket(this)), mw_(mw) {
+    chatRooms_ = new QVector<Room*>();
+
     QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                      this, SLOT(slotConnect()));
     
@@ -35,15 +38,37 @@ void Client::slotConnect() {
         QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                 this, SLOT(addRoom()));
 
-        RoomWindow* rw = new RoomWindow();
-        rw->getUi()->sendArea->installEventFilter(rw);
+        initRoom(name);
+    }
+}
 
-        QObject::connect(rw, SIGNAL(sendMessage(QString*)),
-                         this, SLOT(slotPrepMessage(QString*)));
-
-        mw_->getRooms()->insert(name, rw);
+void Client::addRoom() {
+    QString name = mw_->getUi()->roomField->text();
+    if (!mw_->getRooms()->contains(name)) {
+        initRoom(name);
+    } else {
         mw_->getRooms()->value(name)->show();
     }
+}
+
+void Client::initRoom(QString name) {
+    Room* room = new Room(name);
+    chatRooms_->append(room);
+
+    RoomWindow* rw = new RoomWindow();
+    rw->getUi()->sendArea->installEventFilter(rw);
+
+    QObject::connect(rw, SIGNAL(sendMessage(QString*)),
+                     this, SLOT(slotPrepMessage(QString*)));
+
+    mw_->getRooms()->insert(name, rw);
+    if (name != tr("")) {
+        mw_->getRooms()->value(name)->getUi()->rommName->setText(name);
+        mw_->getRooms()->value(name)->setWindowTitle(name);
+    } else {
+        mw_->getRooms()->value(name)->setWindowTitle(tr("Chat Room"));
+    }
+    mw_->getRooms()->value(name)->show();
 }
 
 void Client::slotPrepMessage(QString * message) {
@@ -59,20 +84,4 @@ void Client::slotDisplayMessage(QByteArray * data) {
     qDebug() << "Msg rx: " << *data;
     QString message(*data);
     mw_->getRooms()->value(tr(""))->getUi()->roomLog->append(message);
-}
-
-void Client::addRoom() {
-    QString name = mw_->getUi()->roomField->text();
-    if (!mw_->getRooms()->contains(name)) {
-        RoomWindow* rw = new RoomWindow();
-        rw->getUi()->sendArea->installEventFilter(rw);
-
-        QObject::connect(rw, SIGNAL(sendMessage(QString*)),
-                         this, SLOT(slotPrepMessage(QString*)));
-
-        mw_->getRooms()->insert(name, rw);
-        mw_->getRooms()->value(name)->show();
-    } else {
-        mw_->getRooms()->value(name)->show();
-    }
 }

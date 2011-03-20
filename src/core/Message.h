@@ -24,35 +24,28 @@ public:
     Message() {}
     virtual ~Message() {}
 
-    qint8 getType() {
-        return type_;
-    }
+    qint8 getType() { return type_; }
 
-    void setType(qint8 t) {
-        type_ = t;
-    }
+    void setType(qint8 t) { type_ = t; }
 
-    QPair<QString, QString> getSender() {
-        return sender_;
-    }
+    QPair<QString, QString> getSender() { return sender_; }
 
-    void setSender(QPair<QString, QString> s) {
-        sender_ = s;
-    }
+    void setSender(QPair<QString, QString> s) { sender_ = s; }
 
-    QString getRoom() {
-        return room_;
-    }
+    QString getRoom() { return room_; }
 
-    void setRoom(QString r) {
-        room_ = r;
-    }
+    void setRoom(QString r) { room_ = r; }
+
+    void setData(QByteArray d) { data_ = d; }
+
+    QByteArray getMessage() { return data_; }
+
+    QVector<QPair<QString, QString> > getUserList();
 
     QByteArray* serialize();
 
     void deserialize(QByteArray* msg);
 
-    QVector<QPair<QString, QString> > getUserList();
 };
 
 #endif // MESSAGE_H
