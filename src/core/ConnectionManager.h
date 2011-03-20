@@ -45,7 +45,7 @@ signals:
     void closedConnection(int socketD);
     void userSetNick(int newSD, char * nick);
     void messageReceived(QByteArray * buffer);
-    void userListReceived(Message* message);
+    void userListReceived(QByteArray * buffer);
 
 public slots:
     void listenForConnections();

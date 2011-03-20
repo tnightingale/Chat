@@ -130,7 +130,9 @@ void Client::slotDisplayMessage(QByteArray * data) {
     mw_->getRooms()->value(msg->getRoom())->getUi()->roomLog->append(message);
 }
 
-void Client::updateUsers(Message *message) {
+void Client::updateUsers(QByteArray* buffer) {
+    Message *message = new Message();
+    message->deserialize(buffer);
     //int index = 0;
     QVector<QPair<QString, QString> > users(message->getUserList());
     //QListWidget* list = mw_->getRooms()->value(message->getRoom())

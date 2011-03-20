@@ -126,7 +126,7 @@ void ConnectionManager::process(Socket * socket) {
     Message* msg = new Message();
     msg->deserialize(buffer);
     if (msg->getType() == USR_LIST) {
-        emit userListReceived(msg);
+        emit userListReceived(msg->serialize());
     } else {
         emit messageReceived(msg->serialize());
     }

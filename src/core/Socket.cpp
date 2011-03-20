@@ -48,6 +48,8 @@ void Socket::listen(int port) {
                      this->parent(), SLOT(slotUserDisconnected(int)));
     QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
                      cm_, SLOT(broadcast(QByteArray *)));
+    QObject::connect(cm_, SIGNAL(userListReceived(QByteArray *)),
+                     cm_, SLOT(broadcast(QByteArray *)));
     cThread_->start();
 }
 
@@ -76,8 +78,8 @@ bool Socket::connect(int port, const char * host) {
                      cm_, SLOT(listenForMessages()));
     QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
                      this->parent(), SLOT(slotDisplayMessage(QByteArray *)));
-    QObject::connect(cm_, SIGNAL(userListReceived(Message*)),
-                     this->parent(), SLOT(updateUsers(Message*)));
+    QObject::connect(cm_, SIGNAL(userListReceived(QByteArray *)),
+                     this->parent(), SLOT(updateUsers(QByteArray *)));
     cThread_->start();
 
     return true;
