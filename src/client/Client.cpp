@@ -35,16 +35,25 @@ void Client::slotConnect() {
         mw_->getUi()->nameField->setReadOnly(true);
         QObject::disconnect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                             this, SLOT(slotConnect()));
-        //QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
-        //                 this, SLOT(addRoom()));
+        QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
+                         this, SLOT(addRoom()));
 
-        //addRoom();
         joinRoom(mw_->getUi()->roomField->text());
         
     }
 }
 
 void Client::joinRoom(QString roomName) {
+    if (QString::compare(roomName, tr("")) == 0) {
+        roomName = tr("Chat Room");
+    }
+
+    if ((chatRooms_->value(roomName)) != 0) {
+        // Already a member of requested room.
+        mw_->getRooms()->value(roomName)->show();
+        return;
+    }
+
     Message * request = new Message();
 
     request->setType(MSG_JOINROOM);
@@ -61,20 +70,11 @@ void Client::setNick(QString name) {
     serverSocket_->write(request->serialize());
 }
 
-/*
 void Client::addRoom() {
-    QString name = mw_->getUi()->roomField->text();
-    if (QString::compare(name, tr("")) == 0) {
-        name = tr("Chat Room");
-    }
-
-    if (!mw_->getRooms()->contains(name)) {
-        initRoom(name);
-    } else {
-        mw_->getRooms()->value(name)->show();
-    }
+    joinRoom(mw_->getUi()->roomField->text());
 }
 
+/*
 void Client::initRoom(QString name) {
     Room* room = new Room(name);
     RoomWindow* rw = new RoomWindow();
