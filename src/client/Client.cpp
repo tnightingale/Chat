@@ -133,6 +133,7 @@ void Client::rxUserList(Message * msg) {
         chatRooms_->insert(roomName, room);
 
         RoomWindow * rw = new RoomWindow(roomName);
+        rw->setAttribute(Qt::WA_DeleteOnClose);
         QObject::connect(rw, SIGNAL(sendMessage(QString*, QString)),
                          this, SLOT(slotPrepMessage(QString*, QString)));
         QObject::connect(rw, SIGNAL(destroyed(QObject *)),
@@ -146,10 +147,15 @@ void Client::rxUserList(Message * msg) {
 
 void Client::slotLeaveRoom(QObject * obj) {
     RoomWindow * rw = (RoomWindow *) obj;
+    QString roomName(rw->windowTitle());
     Message * request = new Message();
 
     request->setType(MSG_LEAVEROOM);
-    request->setRoom(rw->windowTitle());
+    request->setRoom(roomName);
+
+    mw_->getRooms()->remove(roomName);
+    Room * room = chatRooms_->take(roomName);
+    delete room;
 
     serverSocket_->write(request->serialize());
 }
