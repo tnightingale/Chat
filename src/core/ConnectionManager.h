@@ -5,6 +5,7 @@
 
 class Socket;
 class Message;
+
 class ConnectionManager : public QObject {
   Q_OBJECT
 
@@ -41,16 +42,51 @@ public:
     virtual ~ConnectionManager();
 
 signals:
+    /**
+     * Signal a new connection.
+     *
+     * @param newSD The socket descriptor.
+     * @param address The address of the client.
+     *
+     * @author Tom Nightingale
+     */
     void newConnection(int newSD, char * address);
+
+    /**
+     * Signal a closed connection.
+     *
+     * @param socketD The socket whose connection was closed.
+     *
+     * @author Tom Nightingale
+     */
     void closedConnection(int socketD);
-    void userSetNick(int newSD, char * nick);
+
+    /**
+     * Signal that a message has been received.
+     *
+     * @param socketD The socket descriptor on which the message was received.
+     * @param buffer A pointer to a buffer containing the received message.
+     *
+     * @author Tom Nightingale
+     */
     void messageReceived(int socketD, QByteArray * buffer);
-    void userListReceived(QByteArray * buffer);
 
 public slots:
+
+    /**
+     * Listen for connections. This is for server side usage. Will call accept()
+     * and open new client sockets.
+     *
+     * @author Tom Nightingale
+     */
     void listenForConnections();
+
+    /**
+     * Listen to socket for messages. This is for client side usage.
+     *
+     * @author Tom Nightingale
+     */
     void listenForMessages();
-    void broadcast(QByteArray * message, QSet<int> * clients);
 
 private:
     /**
