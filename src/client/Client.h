@@ -24,8 +24,6 @@ public:
 
     bool connect(int port, QString * host);
 
-    //void initRoom(QString name);
-
     void sendUserList(Room room);
 
     void joinRoom(QString roomName);

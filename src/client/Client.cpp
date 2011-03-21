@@ -74,30 +74,6 @@ void Client::addRoom() {
     joinRoom(mw_->getUi()->roomField->text());
 }
 
-/*
-void Client::initRoom(QString name) {
-    Room* room = new Room(name);
-    RoomWindow* rw = new RoomWindow();
-
-    room->addUser(QPair<QString, QString>
-                 (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
-
-    chatRooms_->insert(room->getName(), room);
-
-    QObject::connect(rw, SIGNAL(sendMessage(QString*, QString)),
-                     this, SLOT(slotPrepMessage(QString*, QString)));
-
-    mw_->getRooms()->insert(name, rw);
-    mw_->getRooms()->value(name)->getUi()->rommName->setText(name);
-    mw_->getRooms()->value(name)->setWindowTitle(name);
-
-    //QString username = chatRooms_->at(chatRooms_->size() - 1)->getUser(0).second;
-
-    //mw_->getRooms()->value(name)->getUi()->userList->addItem(username);
-    //mw_->getRooms()->value(name)->show();
-}
-*/
-
 void Client::sendUserList(Room room) {
     Message* message = new Message();
     message->setType(MSG_USERLIST);
@@ -127,11 +103,6 @@ void Client::slotPrepMessage(QString * message, QString roomName) {
     Message* msg = new Message();
     msg->setType(MSG_CHAT);
     msg->setRoom(roomName);
-    foreach (Room* room, *chatRooms_) {
-        if (QString::compare(room->getName(), roomName) == 0) {
-            //msg->setSender(room->getUser(0));
-        }
-    }
     msg->setData(data);
 
     serverSocket_->write(msg->serialize());
