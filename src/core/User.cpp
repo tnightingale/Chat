@@ -1,6 +1,8 @@
 #include "User.h"
+#include <QStringList>
+#include <cstring>
 
-User::User(char * address) 
+User::User(const char * address)
 : address_(new QString(address)), userName_(new QString(address)) {
     qDebug() << "User::User(); User created, address:" << *address_;
 }
@@ -13,4 +15,9 @@ User::~User() {
 
 QDataStream& operator<<(QDataStream& os, const User& user) {
     return os << user.userName_ << "@" << user.address_;
+}
+
+QString User::toString() {
+    QString string(*userName_ + "@" + *address_);
+    return string;
 }
