@@ -140,7 +140,7 @@ void Client::slotDisplayMessage(QByteArray * data) {
             ->roomLog->setFontWeight(QFont::Normal);
     mw_->getRooms()->value(msg->getRoom())->getUi()->roomLog->append(message);
 }
-
+/*
 void Client::updateUsers(QByteArray* buffer) {
     Message *message = new Message();
     message->deserialize(buffer);
@@ -152,7 +152,7 @@ void Client::updateUsers(QByteArray* buffer) {
 
     foreach (Room* room, *chatRooms_) {
         if (QString::compare(room->getName(), message->getRoom()) == 0) {
-            if (room->getUsers()->size() != users.size()) {
+            if (room->getUsers().size() != users.size()) {
                 mw_->getRooms()->value(message->getRoom())->getUi()
                         ->userList->clear();
                 QVectorIterator<QPair<QString, QString> > i(users);
@@ -162,16 +162,18 @@ void Client::updateUsers(QByteArray* buffer) {
                 foreach (QPair<QString, QString> user, users) {
                     room->addUser(user);
                 }*/
+/*
                 QVectorIterator<QPair<QString, QString> > k(users);
                 while (k.hasNext()) {
                     mw_->getRooms()->value(message->getRoom())->getUi()
                             ->userList->addItem(k.next().second);
-                }/*
+                }*//*
                 foreach (QPair<QString, QString> user, users) {
                     mw_->getRooms()->value(message->getRoom())->getUi()
                             ->userList->append(user.second);
                 }*/
-            }
+/*            }
         }
     }
 }
+*/
