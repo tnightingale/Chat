@@ -122,19 +122,5 @@ void ConnectionManager::process(Socket * socket) {
         return;
     }
 
-    // Do stuff with received data here.
-    //Message* msg = new Message();
-    //msg->deserialize(buffer);
-    //if (msg->getType() == USR_LIST) {
-    //    emit userListReceived(msg->serialize());
-    //} else {
-    //    emit messageReceived(msg->serialize());
-    //}
     emit messageReceived(socketD, buffer);
-}
-
-void ConnectionManager::broadcast(QByteArray * message, QSet<int> * clients) {
-    foreach (int socketD, *clients) {
-        clients_->value(socketD)->write(message);
-    }    
 }
