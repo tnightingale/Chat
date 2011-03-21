@@ -141,15 +141,14 @@ void Client::rxUserList(Message * msg) {
         userList.insert(newUser);
     }
 
-    if (mw_->getRooms()->value(roomName)->getUi()->userList->count() != 0) {
+    //if (mw_->getRooms()->value(roomName)->getUi()->userList->count() != 0) {
         mw_->getRooms()->value(roomName)->getUi()->userList->clear();
-    }
+    //}
     QSetIterator<User*> newUser(userList);
     while (newUser.hasNext()) {
         User* nextUser = newUser.next();
         chatRooms_->value(roomName)->addUser(nextUser);
-        mw_->getRooms()->value(roomName)->getUi()
-                ->userList->addItem(nextUser->getUserName());
+        mw_->getRooms()->value(roomName)->getUi()->userList->append(nextUser->getUserName());
     }
 
 }
