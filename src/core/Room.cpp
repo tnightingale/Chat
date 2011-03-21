@@ -18,6 +18,10 @@ void Room::addUser(User * user) {
     users_->insert(user);
 }
 
+void Room::removeUser(User * user) {
+    users_->remove(user);
+}
+
 //void Room::addUser(QPair<QString, QString> user) {
 //    if (!users_->contains(user)) {
 //        users_->append(user);

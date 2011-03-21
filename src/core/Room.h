@@ -30,7 +30,13 @@ public:
      */
     void addUser(User * user);
 
-    //void addUser(QPair<QString, QString> user);
+    /**
+     * Remove a user from the room.
+     *
+     * @param user The user you wish to remove.
+     *
+     */
+    void removeUser(User * user);
 };
 
 #endif // ROOM_H

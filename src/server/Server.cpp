@@ -69,6 +69,16 @@ void Server::userJoinRoom(User * sender, Message * msg) {
     broadcastUserList(room);
 }
 
+void Server::userLeaveRoom(User * sender, Message * msg) {
+    QString roomName(msg->getRoom());
+    Room * room = NULL;
+
+    room = rooms_->value(roomName);
+    room->removeUser(sender);
+
+    broadcastUserList(room);
+}
+
 void Server::broadcastUserList(Room * room) {
     Message * userList = new Message();
 
@@ -112,6 +122,10 @@ void Server::slotMessageRx(int userSD, QByteArray * buffer) {
 
         case MSG_JOINROOM:
             userJoinRoom(sender, msg);
+            break;
+
+        case MSG_LEAVEROOM:
+            userLeaveRoom(sender, msg);
             break;
 
         case MSG_CHAT:

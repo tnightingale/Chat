@@ -135,11 +135,23 @@ void Client::rxUserList(Message * msg) {
         RoomWindow * rw = new RoomWindow(roomName);
         QObject::connect(rw, SIGNAL(sendMessage(QString*, QString)),
                          this, SLOT(slotPrepMessage(QString*, QString)));
+        QObject::connect(rw, SIGNAL(destroyed(QObject *)),
+                         this, SLOT(slotLeaveRoom(QObject *)));
         mw_->getRooms()->insert(roomName, rw);
         rw->show();
     }
 
     // Update user list here.
+}
+
+void Client::slotLeaveRoom(QObject * obj) {
+    RoomWindow * rw = (RoomWindow *) obj;
+    Message * request = new Message();
+
+    request->setType(MSG_LEAVEROOM);
+    request->setRoom(rw->windowTitle());
+
+    serverSocket_->write(request->serialize());
 }
 
 void Client::slotMessageRx(int, QByteArray * data) {

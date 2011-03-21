@@ -40,6 +40,7 @@ public:
 
     void forwardMessage(User * sender, Message * msg);
     void userJoinRoom(User * sender, Message * msg);
+    void userLeaveRoom(User * sender, Message * msg);
     void userSetNick(User * sender, Message * msg);
     QByteArray prepareUserList(QSet<User *> * users);
 

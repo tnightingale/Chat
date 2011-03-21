@@ -8,10 +8,11 @@
 #include "User.h"
 
 /** Message Type defines. */
-#define MSG_CHAT     0
-#define MSG_USERLIST 1
-#define MSG_JOINROOM 2
-#define MSG_SETNICK  3 
+#define MSG_CHAT      0
+#define MSG_USERLIST  1
+#define MSG_JOINROOM  2
+#define MSG_LEAVEROOM 3 
+#define MSG_SETNICK   4 
 
 class Message : public QObject {
     Q_OBJECT
