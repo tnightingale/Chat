@@ -18,6 +18,6 @@ QDataStream& operator<<(QDataStream& os, const User& user) {
 }
 
 QString User::toString() {
-    QString string(*userName_ + "@" + *address_);
-    return string;
+    return *userName_ + "@" + *address_;
+    //return string;
 }

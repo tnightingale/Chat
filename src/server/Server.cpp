@@ -82,8 +82,12 @@ QByteArray Server::prepareUserList(QSet<User *> users) {
         userVector.append(user->toString());
     } 
 
-    qDebug("Server::prepareUserList(); %s", userList->data());
+    foreach (QString u, userVector) {
+        qDebug() << "Server::prepareUserList(); " << u;
+    }
+
     ds << userVector;
+    qDebug() << "Server::prepareUserList(); " << QString(*userList);
 
     return *userList;
 }
