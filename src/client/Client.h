@@ -21,9 +21,11 @@ public:
 
     bool connect(int port, QString * host);
 
-    void initRoom(QString name);
+    //void initRoom(QString name);
 
     void sendUserList(Room room);
+
+    void joinRoom(QString roomName);
 
 signals:
     void newRoom();
@@ -32,6 +34,6 @@ public slots:
     void slotConnect();
     void slotPrepMessage(QString * message, QString roomName);
     void slotDisplayMessage(QByteArray * message);
-    void addRoom();
-    void updateUsers(QByteArray * buffer);
+    //void addRoom();
+    //void updateUsers(QByteArray * buffer);
 };

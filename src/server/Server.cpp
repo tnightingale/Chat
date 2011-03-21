@@ -55,7 +55,7 @@ void Server::forwardMessage(User * sender, Message * msg) {
 }
 
 void Server::userJoinRoom(User * sender, Message * msg) {
-    QString roomName(msg->getMessage());
+    QString roomName(msg->getRoom());
     Room * room = NULL;
     if ((room = rooms_->value(roomName)) == 0) {
         room = new Room(roomName);
