@@ -8,8 +8,13 @@ class User : public QObject {
   Q_OBJECT
 
 private:
+    /** The user's address */
     QString address_;
+
+    /** The user's username. */
     QString userName_;
+
+    /** The user's socket descriptor. */
     int socketD_;
   
 public:
@@ -66,6 +71,12 @@ public:
      */
     QString toString();
 
+    /**
+     * Input and output stream operators for serializing and deserializing 
+     * User objects.
+     *
+     * @author Tom Nightingale
+     */
     friend QDataStream& operator<<(QDataStream& os, const User& user);
     friend QTextStream& operator<<(QTextStream& os, const User& user);
 

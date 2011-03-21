@@ -58,11 +58,20 @@ public:
     /**
      * Binds socket to specific port and begins listening. Listening is done in
      * cThread_ and mangaged by the ConnectionManager.
+     *
+     * @param port The port to listen too.
+     *
+     * @author Tom Nightingale 
      */
     void listen(int port);
 
     /**
      * Connects to host on specified port.
+     *
+     * @param port The port to bind to.
+     * @param host The host to connect to.
+     *
+     * @author Tom Nightingale
      */
     bool connect(int port, const char * host);
 
