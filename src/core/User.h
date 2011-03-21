@@ -13,7 +13,7 @@ private:
     int socketD_;
   
 public:
-    User(char * address);
+    User(const char * address);
     virtual ~User();
 
     /**
@@ -57,6 +57,14 @@ public:
      * @author Tom Nightingale
      */
     int getSocketD() { return socketD_; }
+
+    /**
+     * Makes string representation of User
+     *
+     * @author Marcel Vangrootheest
+     * @return string representation of user
+     */
+    QString toString();
 
     friend QDataStream& operator<<(QDataStream& os, const User& user);
 

@@ -32,8 +32,8 @@ void Message::setSender(User * user) {
     sender_.second = *(user->getUserName());
 }
 
-QVector<QPair<QString, QString> > Message::getUserList() {
-    QVector<QPair<QString, QString> > users;
+QVector<QString> Message::getUserList() {
+    QVector<QString> users;
     QDataStream ds(&data_, QIODevice::ReadOnly);
     ds.setVersion(QDataStream::Qt_4_7);
     ds >> users;
