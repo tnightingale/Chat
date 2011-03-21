@@ -1,7 +1,7 @@
 #include "User.h"
 
 User::User(char * address) 
-: address_(new QString(address)), userName_(NULL) {
+: address_(new QString(address)), userName_(new QString(address)) {
     qDebug() << "User::User(); User created, address:" << *address_;
 }
 
