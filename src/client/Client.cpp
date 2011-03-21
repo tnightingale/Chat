@@ -33,8 +33,8 @@ void Client::slotConnect() {
         mw_->getUi()->nameField->setReadOnly(true);
         QObject::disconnect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                             this, SLOT(slotConnect()));
-        QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
-                         this, SLOT(addRoom()));
+        //QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
+        //                 this, SLOT(addRoom()));
 
         //addRoom();
         joinRoom(mw_->getUi()->roomField->text());
@@ -129,7 +129,7 @@ void Client::slotPrepMessage(QString * message, QString roomName) {
     serverSocket_->write(msg->serialize());
 }
 
-void Client::slotDisplayMessage(QByteArray * data) {
+void Client::slotDisplayMessage(int, QByteArray * data) {
     qDebug() << "Msg rx: ";// << *data;
     //QString message(*data);
     Message* msg = new Message();

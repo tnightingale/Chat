@@ -80,8 +80,8 @@ bool Socket::connect(int port, const char * host) {
     // Wiring up connections.
     QObject::connect(cThread_, SIGNAL(started()),
                      cm_, SLOT(listenForMessages()));
-    QObject::connect(cm_, SIGNAL(messageReceived(QByteArray *)),
-                     this->parent(), SLOT(slotDisplayMessage(QByteArray *)));
+    QObject::connect(cm_, SIGNAL(messageReceived(int, QByteArray *)),
+                     this->parent(), SLOT(slotDisplayMessage(int, QByteArray *)));
     QObject::connect(cm_, SIGNAL(userListReceived(QByteArray *)),
                      this->parent(), SLOT(updateUsers(QByteArray *)));
     cThread_->start();
