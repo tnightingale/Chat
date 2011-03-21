@@ -76,7 +76,16 @@ void Server::userLeaveRoom(User * sender, Message * msg) {
     room = rooms_->value(roomName);
     room->removeUser(sender);
 
-    broadcastUserList(room);
+    // If no more people in room, destroy it.
+    if (room->getUsers()->count() == 0) {
+        rooms_->remove(roomName);
+        delete room;
+    } 
+    
+    // Otherwise notify everyone remaining of changes.
+    else {
+        broadcastUserList(room);
+    }
 }
 
 void Server::broadcastUserList(Room * room) {

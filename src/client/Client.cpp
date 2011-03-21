@@ -10,6 +10,8 @@
 
 Client::Client(MainWindow * mw) : serverSocket_(new Socket(this)), mw_(mw) {
     chatRooms_ = new QMap<QString, Room *>();
+    user_ = new User("Localhost");
+    user_->setUserName("You");
 
     QObject::connect(mw_->getUi()->connectButton, SIGNAL(clicked()),
                      this, SLOT(slotConnect()));
@@ -68,31 +70,11 @@ void Client::setNick(QString name) {
     request->setData(name.toAscii());
 
     serverSocket_->write(request->serialize());
+    user_->setUserName(name);
 }
 
 void Client::addRoom() {
     joinRoom(mw_->getUi()->roomField->text());
-}
-
-void Client::sendUserList(Room room) {
-    Message* message = new Message();
-    message->setType(MSG_USERLIST);
-    message->setRoom(room.getName());
-    //message->setSender(QPair<QString, QString>
-    //               (tr("192.168.0.112"), mw_->getUi()->nameField->text()));
-
-    QByteArray* msg = new QByteArray();
-    QString userString("");
-    QDataStream ds(msg, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_4_7);
-
-    foreach (User * user, *(room.getUsers())) {
-        userString.append(user->toString() + tr(","));
-    }
-
-    ds << userString;
-    message->setData(*msg);
-    serverSocket_->write(message->serialize());
 }
 
 void Client::slotPrepMessage(QString * message, QString roomName) {
@@ -106,6 +88,8 @@ void Client::slotPrepMessage(QString * message, QString roomName) {
     msg->setData(data);
 
     serverSocket_->write(msg->serialize());
+
+    msg->setSender(user_);
     displayMessage(msg);
 }
 
