@@ -73,20 +73,17 @@ void Server::userJoinRoom(User * sender, Message * msg) {
 }
 
 QByteArray Server::prepareUserList(QSet<User *> users) {
-    QVector<QString> userVector = QVector<QString>();
+    QString userString("");
     QByteArray * userList = new QByteArray();
     QDataStream ds(userList, QIODevice::WriteOnly);
     ds.setVersion(QDataStream::Qt_4_7);
 
     foreach (User * user, users) {
-        userVector.append(user->toString());
+        userString.append(user->toString() + tr(","));
     } 
 
-    foreach (QString u, userVector) {
-        qDebug() << "Server::prepareUserList(); " << u;
-    }
-
-    ds << userVector;
+    qDebug() << "Server::prepareUserList(); " << userString;
+    ds << userString;
     qDebug() << "Server::prepareUserList(); " << userList->data();
 
     return *userList;

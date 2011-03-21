@@ -33,7 +33,7 @@ signals:
 public slots:
     void slotConnect();
     void slotPrepMessage(QString * message, QString roomName);
-    void slotDisplayMessage(QByteArray * message);
+    void slotDisplayMessage(int, QByteArray * message);
     //void addRoom();
-    //void updateUsers(QByteArray * buffer);
+    void updateUsers(QByteArray * buffer);
 };

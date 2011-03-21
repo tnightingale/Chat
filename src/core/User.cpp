@@ -1,6 +1,4 @@
 #include "User.h"
-#include <QStringList>
-#include <cstring>
 
 User::User(const char * address)
 : address_(new QString(address)), userName_(new QString(address)) {
