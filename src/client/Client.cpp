@@ -70,6 +70,7 @@ void Client::setNick(QString name) {
     request->setData(name.toAscii());
 
     serverSocket_->write(request->serialize());
+    user_->setUserName(name);
 }
 
 void Client::addRoom() {
