@@ -9,6 +9,8 @@ RoomWindow::RoomWindow(QString name) : QWidget(0), ui(new Ui::RoomWindow) {
     ui->rommName->setText(name);
     setWindowTitle(name);
     QObject::connect(ui->saveLog, SIGNAL(clicked()), this, SLOT(saveFile()));
+    QObject::connect(ui->sendArea, SIGNAL(textChanged()),
+                     this, SLOT(checkTextBox()));
 }
 
 RoomWindow::~RoomWindow() {
@@ -28,6 +30,14 @@ void RoomWindow::saveFile() {
     QTextStream ts(&file);
     ts << ui->roomLog->toPlainText();
     file.close();
+}
+
+void RoomWindow::checkTextBox() {
+    if (ui->sendArea->toPlainText().length() > 250) {
+        QString text = ui->sendArea->toPlainText();
+        text.truncate(250);
+        ui->sendArea->setText(text);
+    }
 }
 
 bool RoomWindow::eventFilter(QObject * obj, QEvent * event) {

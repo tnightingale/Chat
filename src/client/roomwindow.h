@@ -23,7 +23,18 @@ signals:
     void sendMessage(QString * message, QString roomName);
 
 public slots:
+    /**
+     * Saves file to specified text file in QFileDialog.
+     *
+     * @author Marcel Vangrootheest
+     */
     void saveFile();
+    /**
+     * Limits the sendArea to 250 characters
+     *
+     * @author Marcel Vangrootheest
+     */
+    void checkTextBox();
 
 private:
     Ui::RoomWindow *ui;
