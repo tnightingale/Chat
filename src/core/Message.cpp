@@ -13,6 +13,7 @@ QByteArray* Message::serialize() {
        << room_
        << data_;
 
+    // Messages must always end with a \n.
     *msg += '\n';
 
     return msg;
