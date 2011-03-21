@@ -31,27 +31,72 @@ void Server::listen(int port) {
 
 void Server::slotNewUser(int socketDescriptor, char * address) {
     User * user = new User(address);
+    user->setSocketD(socketDescriptor);
     users_->insert(socketDescriptor, user);
 }
-
-//void Server::slotJoinRoom(
 
 void Server::slotUserDisconnected(int socketDiscriptor) {
     User * user = users_->take(socketDiscriptor);
     delete user;
 }
 
-void Server::slotMessageRx(QByteArray * buffer) {
+void Server::forwardMessage(User * sender, Message * msg) {
+    QSet<User *> recipients = rooms_->value(msg->getRoom())->getUsers();
+    QSet<int> * recipientDs = new QSet<int>();
+
+    foreach (User * user, recipients) {
+        if (user->getSocketD() == sender->getSocketD()) {
+            continue;
+        }
+        recipientDs->insert(user->getSocketD()); 
+    }
+
+    emit bcstMsg(msg->serialize(), recipientDs);
+}
+
+void Server::userJoinRoom(User * sender, Message * msg) {
+    QString roomName(msg->getMessage());
+    Room * room = NULL;
+    if ((room = rooms_->value(roomName)) == 0) {
+        room = new Room(roomName);
+        rooms_->insert(roomName, room);
+    }
+    room->addUser(sender);
+
+    Message * userList = new Message();
+    userList->setType(MSG_USERLIST);
+    userList->setRoom(roomName);
+    userList->setData(prepareUserList(room->getUsers()));
+    forwardMessage(NULL, userList);
+}
+
+QByteArray Server::prepareUserList(QSet<User *> users) {
+    QByteArray userList;
+    QDataStream ds(userList);
+    foreach (User * user, users) {
+        ds << *user << ","; 
+    } 
+
+    return userList;
+}
+
+void Server::slotMessageRx(int userSD, QByteArray * buffer) {
     Message * msg = new Message(buffer);
+    User * sender = users_->value(userSD);
 
+    msg->setSender(sender);
     switch (msg->getType()) {
-        case USR_LIST:
+        case MSG_USERLIST:
         //emit userListReceived(msg->serialize());
-          break;
+            break;
 
-        case CHAT_MSG:
-          rooms_->value(msg->getRoom())->newMessage(msg);
-          break;
+        case MSG_JOINROOM:
+            userJoinRoom(sender, msg);
+            break;
+
+        case MSG_CHAT:
+            forwardMessage(sender, msg);
+            break;
 
         default:
           // Shouldn't get here.

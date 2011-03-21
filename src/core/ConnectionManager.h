@@ -50,7 +50,7 @@ signals:
 public slots:
     void listenForConnections();
     void listenForMessages();
-    void broadcast(QByteArray * message);
+    void broadcast(QByteArray * message, QSet<int> * clients);
 
 private:
     /**

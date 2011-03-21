@@ -10,6 +10,7 @@ class User : public QObject {
 private:
     QString * address_;
     QString * userName_;
+    int socketD_;
   
 public:
     User(char * address);
@@ -38,6 +39,27 @@ public:
      * @author Tom Nightingale
      */
     const QString * getAddress() { return address_; }
+
+    /**
+     * FOR SERVER USE
+     * Set the socket descriptor used to communicate with user's client.
+     *
+     * @param socketD A socketDesciptor that is paired with the user.
+     *
+     * @author Tom Nightingale
+     */
+    void setSocketD(int socketD) { socketD_ = socketD; }
+
+    /**
+     * FOR SERVER USE
+     * Get the user's socket descriptor.
+     * 
+     * @author Tom Nightingale
+     */
+    int getSocketD() { return socketD_; }
+
+    friend QDataStream& operator<<(QDataStream& os, const User& user);
+
 };
 
 #endif

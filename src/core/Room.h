@@ -20,25 +20,17 @@ public:
 
     QString getName() { return name_; }
 
-    QVector<QPair<QString, QString> >* getUsers() { return users_; }
+    QSet<User *> getUsers() { return *users_; }
 
-    QPair<QString, QString> getUser(int index) { return users_->at(index); }
-
+    /**
+     * Add a user to the room.
+     *
+     * @param user The user you wish to add.
+     *
+     */
     void addUser(User * user);
 
     //void addUser(QPair<QString, QString> user);
-
-    /**
-     * A new message has been posted in this room.
-     *
-     * @param msg The message that has been posted.
-     * 
-     * @author Tom Nightingale
-     */
-    void newMessage(Message * msg);
-
-signals:
-    void broadcastMessage(QByteArray * message, QList<User *> * users);
 };
 
 #endif // ROOM_H

@@ -4,6 +4,7 @@
 class Socket;
 class User;
 class Room;
+class Message;
 
 class Server : public QObject {
   Q_OBJECT
@@ -34,8 +35,15 @@ public:
      */
     void listen(int port = 7000);
 
+    void forwardMessage(User * sender, Message * msg);
+    void userJoinRoom(User * sender, Message * msg);
+    QByteArray prepareUserList(QSet<User *> users);
+
+signals:
+    void bcstMsg(QByteArray * message, QSet<int> * users);
+
 public slots:
     void slotNewUser(int socketDescriptor, char * address);
     void slotUserDisconnected(int socketDiscriptor);
-    void slotMessageRx(QByteArray * buffer);
+    void slotMessageRx(int socketDiscriptor, QByteArray * buffer);
 };

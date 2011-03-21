@@ -10,3 +10,7 @@ User::~User() {
     delete address_;
     delete userName_;
 }
+
+QDataStream& operator<<(QDataStream& os, const User& user) {
+    return os << user.userName_ << "@" << user.address_;
+}

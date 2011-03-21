@@ -133,8 +133,8 @@ void ConnectionManager::process(Socket * socket) {
     emit messageReceived(buffer);
 }
 
-void ConnectionManager::broadcast(QByteArray * message) {
-    foreach (Socket * socket, *clients_) {
-        socket->write(message);
+void ConnectionManager::broadcast(QByteArray * message, QSet<int> * clients) {
+    foreach (int socketD, *clients) {
+        clients_->value(socketD)->write(message);
     }    
 }

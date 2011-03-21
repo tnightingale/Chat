@@ -1,7 +1,7 @@
 #include "Room.h"
 
 Room::Room(QString name) 
-: name_(name), users_(new QSet<User *>()) {}
+: users_(new QSet<User *>()), name_(name) {}
 
 Room::~Room() {
     delete users_;
@@ -15,7 +15,7 @@ void Room::addUser(User * user) {
     //if (!users_->contains(newUser)) {
     //    users_->append(newUser);
     //}
-    users_->add(user);
+    users_->insert(user);
 }
 
 //void Room::addUser(QPair<QString, QString> user) {
@@ -24,7 +24,3 @@ void Room::addUser(User * user) {
 //    }
 //}
 
-void Room::newMessage(Message * msg) {
-    // Broadcast message here.
-    
-}
