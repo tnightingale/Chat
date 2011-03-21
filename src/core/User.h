@@ -8,8 +8,8 @@ class User : public QObject {
   Q_OBJECT
 
 private:
-    QString * address_;
-    QString * userName_;
+    QString address_;
+    QString userName_;
     int socketD_;
   
 public:
@@ -24,21 +24,21 @@ public:
      *
      * @author Tom Nightingale
      */
-    void setUserName(QString& userName) { userName_ = &userName; }
+    void setUserName(QString userName) { userName_ = userName; }
 
     /**
      * Returns the user's username.
      *
      * @author Tom Nightingale
      */
-    const QString * getUserName() { return userName_; }
+    const QString getUserName() { return userName_; }
 
     /**
      * Returns the user's address.
      *
      * @author Tom Nightingale
      */
-    const QString * getAddress() { return address_; }
+    const QString getAddress() { return address_; }
 
     /**
      * FOR SERVER USE
@@ -67,6 +67,7 @@ public:
     QString toString();
 
     friend QDataStream& operator<<(QDataStream& os, const User& user);
+    friend QTextStream& operator<<(QTextStream& os, const User& user);
 
 };
 

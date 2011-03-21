@@ -2,11 +2,11 @@
 #include "ui_roomwindow.h"
 #include "../core/Message.h"
 
-RoomWindow::RoomWindow(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::RoomWindow) {
+RoomWindow::RoomWindow(QString name) : QWidget(0), ui(new Ui::RoomWindow) {
     ui->setupUi(this);
     ui->sendArea->installEventFilter(this);
+    ui->rommName->setText(name);
+    setWindowTitle(name);
 }
 
 RoomWindow::~RoomWindow() {

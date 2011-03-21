@@ -13,7 +13,7 @@ class RoomWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit RoomWindow(QWidget *parent = 0);
+    explicit RoomWindow(QString name);
     ~RoomWindow();
 
     Ui::RoomWindow * getUi() { return ui; }

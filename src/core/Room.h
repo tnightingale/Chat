@@ -20,7 +20,7 @@ public:
 
     QString getName() { return name_; }
 
-    QSet<User *> getUsers() { return *users_; }
+    QSet<User *> * getUsers() { return users_; }
 
     /**
      * Add a user to the room.

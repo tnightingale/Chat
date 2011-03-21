@@ -28,6 +28,8 @@ void Client::slotConnect() {
     int port = mw_->getUi()->portField->text().toInt();
 
     if (this->connect(port, &host)) {
+        setNick(mw_->getUi()->nameField->text());
+
         mw_->getUi()->ipField->setReadOnly(true);
         mw_->getUi()->portField->setReadOnly(true);
         mw_->getUi()->nameField->setReadOnly(true);
@@ -47,6 +49,14 @@ void Client::joinRoom(QString roomName) {
 
     request->setType(MSG_JOINROOM);
     request->setRoom(roomName);
+
+    serverSocket_->write(request->serialize());
+}
+
+void Client::setNick(QString name) {
+    Message * request = new Message();
+    request->setType(MSG_SETNICK);
+    request->setData(name.toAscii());
 
     serverSocket_->write(request->serialize());
 }
@@ -100,7 +110,7 @@ void Client::sendUserList(Room room) {
     QDataStream ds(msg, QIODevice::WriteOnly);
     ds.setVersion(QDataStream::Qt_4_7);
 
-    foreach (User * user, room.getUsers()) {
+    foreach (User * user, *(room.getUsers())) {
         userString.append(user->toString() + tr(","));
     }
 
@@ -110,8 +120,6 @@ void Client::sendUserList(Room room) {
 }
 
 void Client::slotPrepMessage(QString * message, QString roomName) {
-    qDebug() << "Msg tx: " << *message;
-
     // Messages are terminated with '\n'.
     *message += '\n';
     QByteArray data = message->toAscii();
@@ -127,13 +135,10 @@ void Client::slotPrepMessage(QString * message, QString roomName) {
     msg->setData(data);
 
     serverSocket_->write(msg->serialize());
+    displayMessage(msg);
 }
 
-void Client::slotDisplayMessage(int, QByteArray * data) {
-    qDebug() << "Msg rx: ";// << *data;
-    //QString message(*data);
-    Message* msg = new Message();
-    msg->deserialize(data);
+void Client::displayMessage(Message * msg) {
     QString message(msg->getMessage());
 
     mw_->getRooms()->value(msg->getRoom())->getUi()
@@ -145,6 +150,49 @@ void Client::slotDisplayMessage(int, QByteArray * data) {
     mw_->getRooms()->value(msg->getRoom())->getUi()
             ->roomLog->setFontWeight(QFont::Normal);
     mw_->getRooms()->value(msg->getRoom())->getUi()->roomLog->append(message);
+}
+
+void Client::rxUserList(Message * msg) {
+    QString roomName(msg->getRoom());
+    Room * room = NULL;
+
+    if ((room = chatRooms_->value(msg->getRoom())) == 0) {
+        // Room doesn't exist, create it.
+        room = new Room(roomName);
+        chatRooms_->insert(roomName, room);
+
+        RoomWindow * rw = new RoomWindow(roomName);
+        QObject::connect(rw, SIGNAL(sendMessage(QString*, QString)),
+                         this, SLOT(slotPrepMessage(QString*, QString)));
+        mw_->getRooms()->insert(roomName, rw);
+        rw->show();
+    }
+
+    // Update user list here.
+}
+
+void Client::slotMessageRx(int, QByteArray * data) {
+    qDebug() << "Msg rx: " << data;
+
+    Message* msg = new Message(data);
+
+    switch (msg->getType()) {
+        case MSG_CHAT:
+            displayMessage(msg);
+            break;
+        
+        case MSG_USERLIST:
+            // Received a room user list request.
+            // - If room doesn't exist, now is a good time to create it & its 
+            //   window.
+            // - Otherwise just update the existing rooms userlist.
+            rxUserList(msg);
+            break;
+
+        default:
+            // No go here.
+            break;
+    }
 }
 
 void Client::updateUsers(QByteArray* buffer) {

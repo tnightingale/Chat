@@ -28,8 +28,8 @@ void Message::deserialize(QByteArray* msg) {
 }
 
 void Message::setSender(User * user) {
-    sender_.first = *(user->getAddress());
-    sender_.second = *(user->getUserName());
+    sender_.first = user->getAddress();
+    sender_.second = user->getUserName();
 }
 
 QString Message::getUserList() {

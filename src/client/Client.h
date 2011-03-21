@@ -14,6 +14,9 @@ private:
     Socket * serverSocket_;
     MainWindow * mw_;
     QMap<QString, Room *> * chatRooms_;
+
+    void displayMessage(Message * msg);
+    void rxUserList(Message * msg);
   
 public:
     Client(MainWindow * mw);
@@ -26,6 +29,7 @@ public:
     void sendUserList(Room room);
 
     void joinRoom(QString roomName);
+    void setNick(QString name);
 
 signals:
     void newRoom();
@@ -33,7 +37,7 @@ signals:
 public slots:
     void slotConnect();
     void slotPrepMessage(QString * message, QString roomName);
-    void slotDisplayMessage(int, QByteArray * message);
+    void slotMessageRx(int, QByteArray * message);
     //void addRoom();
     void updateUsers(QByteArray * buffer);
 };

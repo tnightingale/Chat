@@ -22,6 +22,9 @@ private:
     /** Collection of rooms. */
     QMap<QString, Room *> * rooms_;
 
+
+    void broadcastUserList(Room * room);
+
 public:
     Server();
     virtual ~Server();
@@ -37,7 +40,8 @@ public:
 
     void forwardMessage(User * sender, Message * msg);
     void userJoinRoom(User * sender, Message * msg);
-    QByteArray prepareUserList(QSet<User *> users);
+    void userSetNick(User * sender, Message * msg);
+    QByteArray prepareUserList(QSet<User *> * users);
 
 signals:
     void bcstMsg(QByteArray * message, QSet<int> * users);

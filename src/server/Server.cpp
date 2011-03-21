@@ -41,17 +41,18 @@ void Server::slotUserDisconnected(int socketDiscriptor) {
 }
 
 void Server::forwardMessage(User * sender, Message * msg) {
-    QSet<User *> recipients(rooms_->value(msg->getRoom())->getUsers());
-    QSet<int> * recipientDs = new QSet<int>();
+    QSet<User *> * recipients(rooms_->value(msg->getRoom())->getUsers());
 
-    foreach (User * user, recipients) {
+    foreach (User * user, *recipients) {
         if (sender != NULL && user->getSocketD() == sender->getSocketD()) {
             continue;
         }
-        recipientDs->insert(user->getSocketD()); 
-    }
 
-    emit bcstMsg(msg->serialize(), recipientDs);
+        // TODO: This was supposed to be encapsulated by the Socket class. 
+        QByteArray * buffer = msg->serialize();
+        const char * bp = buffer->constData();
+        ::write(user->getSocketD(), bp, buffer->size());
+    }
 }
 
 void Server::userJoinRoom(User * sender, Message * msg) {
@@ -65,28 +66,41 @@ void Server::userJoinRoom(User * sender, Message * msg) {
     }
     room->addUser(sender);
 
+    broadcastUserList(room);
+}
+
+void Server::broadcastUserList(Room * room) {
     Message * userList = new Message();
+
     userList->setType(MSG_USERLIST);
-    userList->setRoom(roomName);
+    userList->setRoom(room->getName());
     userList->setData(prepareUserList(room->getUsers()));
+
     forwardMessage(NULL, userList);
 }
 
-QByteArray Server::prepareUserList(QSet<User *> users) {
-    QString userString("");
-    QByteArray * userList = new QByteArray();
-    QDataStream ds(userList, QIODevice::WriteOnly);
-    ds.setVersion(QDataStream::Qt_4_7);
+QByteArray Server::prepareUserList(QSet<User *> * users) {
+    QString userString;
+    QTextStream ts(&userString);
 
-    foreach (User * user, users) {
-        userString.append(user->toString() + tr(","));
+    foreach (User * user, *users) {
+        ts << *user << ",";
     } 
 
-    qDebug() << "Server::prepareUserList(); " << userString;
-    ds << userString;
-    qDebug() << "Server::prepareUserList(); " << userList->data();
+    qDebug() << "Server::prepareUserList(); " << userString.toAscii();
 
-    return *userList;
+    return userString.toAscii();
+}
+
+void Server::userSetNick(User * sender, Message * msg) {
+    QString newName(msg->getMessage());
+    sender->setUserName(newName);
+
+    // TODO: This will update the user's name globally but only notify the 
+    //       user's current room. Others will eventually get updated.
+    if (msg->getRoom() != "") {
+        broadcastUserList(rooms_->value(msg->getRoom()));
+    }
 }
 
 void Server::slotMessageRx(int userSD, QByteArray * buffer) {
@@ -95,9 +109,6 @@ void Server::slotMessageRx(int userSD, QByteArray * buffer) {
 
     msg->setSender(sender);
     switch (msg->getType()) {
-        case MSG_USERLIST:
-        //emit userListReceived(msg->serialize());
-            break;
 
         case MSG_JOINROOM:
             userJoinRoom(sender, msg);
@@ -105,6 +116,10 @@ void Server::slotMessageRx(int userSD, QByteArray * buffer) {
 
         case MSG_CHAT:
             forwardMessage(sender, msg);
+            break;
+
+        case MSG_SETNICK:
+            userSetNick(sender, msg);
             break;
 
         default:
