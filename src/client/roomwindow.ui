@@ -83,7 +83,7 @@
      <x>345</x>
      <y>21</y>
      <width>131</width>
-     <height>341</height>
+     <height>261</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -100,9 +100,9 @@
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>0</y>
+     <y>290</y>
      <width>121</width>
-     <height>16</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="text">
