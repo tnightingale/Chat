@@ -82,8 +82,6 @@ bool Socket::connect(int port, const char * host) {
                      cm_, SLOT(listenForMessages()));
     QObject::connect(cm_, SIGNAL(messageReceived(int, QByteArray *)),
                      this->parent(), SLOT(slotMessageRx(int, QByteArray *)));
-    //QObject::connect(cm_, SIGNAL(userListReceived(QByteArray *)),
-    //                 this->parent(), SLOT(updateUsers(QByteArray *)));
     cThread_->start();
 
     return true;
