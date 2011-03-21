@@ -34,8 +34,7 @@ void Message::setSender(User * user) {
 
 QString Message::getUserList() {
     QString users;
-    QDataStream ds(&data_, QIODevice::ReadOnly);
-    ds.setVersion(QDataStream::Qt_4_7);
-    ds >> users;
+    QTextStream ts(&data_);
+    ts >> users;
     return users;
 }

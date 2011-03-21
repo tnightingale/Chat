@@ -143,6 +143,30 @@ void Client::rxUserList(Message * msg) {
     }
 
     // Update user list here.
+    QString users(msg->getUserList());
+    QSet<User*> userList = QSet<User*>();
+
+    int mid = 0;
+    QStringList userStrings = users.split(tr(","), QString::SkipEmptyParts);
+    while (!userStrings.isEmpty()) {
+        QString userString = userStrings.takeFirst();
+        mid = userString.indexOf(tr("@"));
+        User* newUser = new User(userString.right(
+                userString.size() - mid - 1).toAscii().data());
+        newUser->setUserName(userString.left(mid).toAscii().data());
+        userList.insert(newUser);
+    }
+
+
+    mw_->getRooms()->value(roomName)->getUi()->userList->clear();
+    QSetIterator<User*> newUser(userList);
+    while (newUser.hasNext()) {
+        User* nextUser = newUser.next();
+        chatRooms_->value(roomName)->addUser(nextUser);
+        mw_->getRooms()->value(roomName)->getUi()
+                ->userList->addItem(nextUser->getUserName());
+    }
+
 }
 
 void Client::slotLeaveRoom(QObject * obj) {
