@@ -87,7 +87,7 @@ QByteArray Server::prepareUserList(QSet<User *> users) {
     }
 
     ds << userVector;
-    qDebug() << "Server::prepareUserList(); " << *userList;
+    qDebug() << "Server::prepareUserList(); " << userList->data();
 
     return *userList;
 }
