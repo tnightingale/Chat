@@ -13,6 +13,8 @@ QByteArray* Message::serialize() {
        << room_
        << data_;
 
+    *msg += '\n';
+
     return msg;
 }
 
