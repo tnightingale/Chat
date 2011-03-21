@@ -19,17 +19,23 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    /**
+     * Returns the window's ui object.
+     */
     Ui::MainWindow * getUi() { return ui; }
 
-    QMap<QString, RoomWindow*>* getRooms() {
-        return rooms;
-    }
-
-signals:
-    void sendMessage(QString * message);
+    /**
+     * Returns map of current room windows.
+     *
+     * @author Marcel Vangrootheest
+     */
+    QMap<QString, RoomWindow*>* getRooms() { return rooms; }
 
 protected:
+    /** Qt user interface object. */
     Ui::MainWindow *ui;
+
+    /** Map of room windows. */
     QMap<QString, RoomWindow*>* rooms;
 };
 
