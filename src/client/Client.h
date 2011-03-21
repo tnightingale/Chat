@@ -38,5 +38,4 @@ public slots:
     void slotMessageRx(int, QByteArray * message);
     void slotLeaveRoom(QObject *);
     void addRoom();
-    void updateUsers(QByteArray * buffer);
 };

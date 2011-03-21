@@ -192,23 +192,3 @@ void Client::slotMessageRx(int, QByteArray * data) {
             break;
     }
 }
-
-void Client::updateUsers(QByteArray* buffer) {
-    Message *message = new Message();
-    message->deserialize(buffer);
-    QString users(message->getUserList());
-    QSet<User*> userList = QSet<User*>();
-
-    int mid = 0;
-    QStringList userStrings = users.split(tr(","), QString::SkipEmptyParts);
-    foreach (QString userString, userStrings) {
-        mid = userString.indexOf(tr("@"));
-        User* newUser = new User(userString.right(mid).toAscii().data());
-        userList.insert(newUser);
-    }
-
-    QSetIterator<User*> newUser(userList);
-    while (newUser.hasNext()) {
-        chatRooms_->value(message->getRoom())->addUser(newUser.next());
-    }
-}
