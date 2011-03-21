@@ -37,6 +37,11 @@ void Server::slotNewUser(int socketDescriptor, char * address) {
 
 void Server::slotUserDisconnected(int socketDiscriptor) {
     User * user = users_->take(socketDiscriptor);
+
+    foreach (Room * room, *rooms_) {
+        room->removeUser(user);
+    }
+
     delete user;
 }
 
@@ -99,16 +104,16 @@ void Server::broadcastUserList(Room * room) {
 }
 
 QByteArray Server::prepareUserList(QSet<User *> * users) {
-    QString userString;
-    QTextStream ts(&userString);
+    QString * userString = new QString();
+    QTextStream ts(userString);
 
     foreach (User * user, *users) {
         ts << *user << ",";
     } 
 
-    qDebug() << "Server::prepareUserList(); " << userString.toAscii();
+    qDebug() << "Server::prepareUserList(); " << userString->toAscii();
 
-    return userString.toAscii();
+    return userString->toAscii();
 }
 
 void Server::userSetNick(User * sender, Message * msg) {
