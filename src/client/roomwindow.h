@@ -22,6 +22,9 @@ public:
 signals:
     void sendMessage(QString * message, QString roomName);
 
+public slots:
+    void saveFile();
+
 private:
     Ui::RoomWindow *ui;
 };
